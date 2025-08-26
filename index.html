@@ -1,455 +1,369 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Excel Audit & Calculator</title>
-  <link rel="icon" href="data:,">
-  <style>
-    :root{
-      --bg: #0b1020; --panel: #121831; --muted:#9aa4bf; --text:#f3f5ff; --accent:#6aa6ff; --accent2:#7cfaa3; --danger:#ff6a8e;
-    }
-    *{box-sizing:border-box}
-    body{margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji"; background:linear-gradient(180deg, #0b1020, #10162e) fixed; color:var(--text)}
-    .wrap{max-width:1100px; margin:40px auto; padding:0 16px}
-    header{display:flex; gap:16px; align-items:center; justify-content:space-between; margin-bottom:16px}
-    h1{font-size:clamp(1.4rem, 2.2vw, 2rem); margin:0}
-    .card{background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:18px; padding:16px; box-shadow:0 10px 30px rgba(0,0,0,.25)}
-    .grid{display:grid; gap:16px}
-    @media (min-width:900px){ .grid-2{grid-template-columns:1.2fr .8fr} }
-    .btn{appearance:none; background:var(--accent); color:#050814; border:none; padding:10px 14px; border-radius:12px; font-weight:700; cursor:pointer}
-    .btn.secondary{ background:#232a4d; color:var(--text) }
-    .btn.ghost{ background:transparent; border:1px solid rgba(255,255,255,0.18); color:var(--text) }
-    .btn.danger{ background:var(--danger) }
-    .muted{color:var(--muted)}
-    .upload{border:2px dashed rgba(255,255,255,0.18); border-radius:16px; padding:18px; text-align:center}
-    .upload.dragover{background:rgba(106,166,255,.1)}
-    input[type="file"]{display:none}
-    .row{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
-    select, input[type="text"]{background:#0f1530; color:var(--text); border:1px solid rgba(255,255,255,0.18); border-radius:12px; padding:10px; min-width:180px}
-    table{width:100%; border-collapse:collapse; font-size:14px}
-    th, td{border-bottom:1px solid rgba(255,255,255,0.08); padding:8px 10px; text-align:left}
-    thead th{position:sticky; top:0; background:#0e1430; z-index:1}
-    .scroller{max-height:380px; overflow:auto; border:1px solid rgba(255,255,255,0.08); border-radius:12px}
-    .pill{display:inline-flex; align-items:center; gap:8px; background:#0e1533; border:1px solid rgba(255,255,255,0.12); padding:8px 12px; border-radius:999px}
-    .mono{font-family: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
-    footer{margin:24px 0; color:#7f8ab5; font-size:12px}
-    .kbd{padding:2px 6px; border:1px solid rgba(255,255,255,0.2); border-bottom-width:2px; border-radius:6px; font-family:inherit; font-size:12px}
-    .hidden{display:none}
-  </style>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Audit Ledger — Form Entry</title>
+<link rel="icon" href="data:;">
+<style>
+  body{font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial; background:#f4f7fb; color:#0b1730; margin:0; padding:20px}
+  .wrap{max-width:1100px;margin:0 auto}
+  header{display:flex;justify-content:space-between;align-items:center;gap:12px}
+  h1{margin:0;font-size:20px}
+  .card{background:white;border-radius:10px;padding:14px;box-shadow:0 6px 18px rgba(11,23,48,0.06); margin-top:16px}
+  form .row{display:flex;gap:8px;flex-wrap:wrap}
+  label{font-size:13px;color:#5b6b86}
+  input,select{padding:8px;border:1px solid #e7eef8;border-radius:8px;min-width:140px}
+  input[type=date]{min-width:160px}
+  button{padding:8px 12px;border-radius:8px;border:none;background:#0b66ff;color:white;cursor:pointer}
+  button.ghost{background:transparent;border:1px solid #cbdcf9;color:#123}
+  table{width:100%;border-collapse:collapse;margin-top:12px;font-size:13px}
+  th,td{padding:8px;border-bottom:1px solid #eef4fb;text-align:left}
+  .muted{color:#5b6b86;font-size:13px}
+  .controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .summary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:12px}
+  .pill{background:#f1f6ff;padding:8px;border-radius:8px;border:1px solid #e1ecff}
+  .right{margin-left:auto}
+  .mono{font-family:monospace;font-size:13px}
+  .small{font-size:12px;color:#5b6b86}
+  .actions{display:flex;gap:8px}
+  .danger{background:#ff5c6d}
+  .kbd{background:#eef4fb;padding:4px 8px;border-radius:6px;font-size:12px}
+</style>
 </head>
 <body>
-  <div class="wrap">
-    <header>
-      <h1>Excel Audit & Calculator</h1>
+<div class="wrap">
+  <header>
+    <h1>Audit Ledger — Form Entry (from 1.jan audit.xlsx)</h1>
+    <div class="small">Client-side only • ready for GitHub Pages</div>
+  </header>
+
+  <section class="card" id="entryCard">
+    <h2 style="margin-top:0">Add / Edit Entry</h2>
+    <form id="entryForm" onsubmit="return false;">
       <div class="row">
-        <button id="btnExportSummaryCSV" class="btn secondary" disabled>Export Summary CSV</button>
-        <button id="btnExportSummaryJSON" class="btn ghost" disabled>Export Summary JSON</button>
-        <a id="btnDownloadTemplate" class="btn" href="#" download="data_template.xlsx">Download Template</a>
+        <label>Date<br/><input type="date" id="f_date" required></label>
+        <label>PARTICULARS<br/><input id="f_part" placeholder="Particulars"></label>
+        <label>Vch Type<br/><input id="f_vtype" placeholder="Voucher type"></label>
+        <label>Vch No.<br/><input id="f_vno" placeholder="Voucher no."></label>
+        <label>Debit<br/><input id="f_debit" type="number" step="0.01" min="0" value="0"></label>
+        <label>Credit<br/><input id="f_credit" type="number" step="0.01" min="0" value="0"></label>
       </div>
-    </header>
-
-    <div class="grid grid-2">
-      <section class="card">
-        <h2 style="margin-top:0">1) Upload Excel</h2>
-        <div class="upload" id="drop">
-          <p class="muted">Drop your <span class="pill"><span class="mono">.xlsx</span> / <span class="mono">.xls</span> / <span class="mono">.csv</span></span> here<br/>or</p>
-          <label class="btn">
-            <input type="file" id="file" accept=".xlsx,.xls,.csv"/>
-            Choose a file
-          </label>
+      <div style="margin-top:10px" class="controls">
+        <div class="actions">
+          <button id="btnAdd">Add Entry</button>
+          <button id="btnUpdate" class="ghost" style="display:none">Update</button>
+          <button id="btnClear" type="button" class="ghost">Clear</button>
         </div>
+        <div class="right"><span class="small">Shortcut: Press <span class="kbd">Enter</span> to add</span></div>
+      </div>
+    </form>
+  </section>
 
-        <div style="margin-top:16px" class="row">
-          <label class="pill">Sheet:
-            <select id="sheetSelect"></select>
-          </label>
-          <button id="btnAnalyze" class="btn">Analyze</button>
-          <button id="btnClear" class="btn ghost">Clear</button>
-        </div>
-
-        <div id="fileInfo" class="muted" style="margin-top:8px"></div>
-
-        <div id="tableWrap" class="scroller" style="margin-top:16px">
-          <table id="dataTable">
-            <thead></thead>
-            <tbody></tbody>
-          </table>
-        </div>
-      </section>
-
-      <section class="card">
-        <h2 style="margin-top:0">2) Calculations</h2>
-        <p class="muted">Automatic numeric column statistics: <span class="mono">count</span>, <span class="mono">sum</span>, <span class="mono">mean</span>, <span class="mono">min</span>, <span class="mono">max</span>, <span class="mono">std</span>.</p>
-        <div id="summary" class="scroller" style="max-height:240px"></div>
-
-        <h3>Group by (Pivot-lite)</h3>
-        <div class="row">
-          <select id="groupSelect"></select>
-          <select id="aggSelect">
-            <option value="sum">Sum</option>
-            <option value="mean">Mean</option>
-            <option value="count">Count</option>
-            <option value="min">Min</option>
-            <option value="max">Max</option>
-          </select>
-          <button id="btnGroup" class="btn secondary">Run</button>
-          <button id="btnExportGroupCSV" class="btn ghost" disabled>Export Group CSV</button>
-        </div>
-        <div id="groupOut" class="scroller" style="margin-top:12px; max-height:200px"></div>
-      </section>
+  <section class="card" id="tableCard">
+    <h2 style="margin-top:0">Entries</h2>
+    <div class="muted">Rows are stored in your browser. Edit / Delete as needed. Running balance is computed as cumulative (Debit - Credit) by date order.</div>
+    <div style="margin-top:12px" class="controls">
+      <input id="filterMonth" type="month" />
+      <select id="filterVtype"><option value="">-- Filter Vch Type --</option></select>
+      <button id="btnApplyFilter" class="ghost">Apply</button>
+      <button id="btnResetFilter" class="ghost">Reset</button>
+      <div class="right actions">
+        <button id="btnExportCSV" class="ghost">Export CSV</button>
+        <button id="btnExportXLS" class="ghost">Export Excel</button>
+        <button id="btnClearAll" class="danger">Clear All</button>
+      </div>
     </div>
 
-    <footer>
-      Tip: You can switch sheets via the dropdown. Keyboard: <span class="kbd">G</span> to focus Group, <span class="kbd">A</span> Analyze, <span class="kbd">C</span> Clear.
-    </footer>
-  </div>
+    <div id="tableWrap" style="overflow:auto;margin-top:12px">
+      <table id="entriesTable">
+        <thead><tr>
+          <th>#</th><th>Date</th><th>Particulars</th><th>Vch Type</th><th>Vch No.</th><th>Debit</th><th>Credit</th><th>Running Balance</th><th>Actions</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
 
-  <!-- SheetJS for parsing Excel in-browser -->
-  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.20.2/dist/xlsx.full.min.js"></script>
-  <script>
-    const el = (q)=>document.querySelector(q);
-    const tbl = {
-      head: el('#dataTable thead'),
-      body: el('#dataTable tbody'),
+  <section class="card" id="summaryCard">
+    <h2 style="margin-top:0">Summaries & Reports</h2>
+    <div class="summary-grid">
+      <div class="pill">
+        <div class="small">Total Debit</div>
+        <div id="totalDebit" class="mono">0.00</div>
+      </div>
+      <div class="pill">
+        <div class="small">Total Credit</div>
+        <div id="totalCredit" class="mono">0.00</div>
+      </div>
+      <div class="pill">
+        <div class="small">Closing Balance (Debit - Credit)</div>
+        <div id="closingBalance" class="mono">0.00</div>
+      </div>
+      <div class="pill">
+        <div class="small">Number of Entries</div>
+        <div id="countEntries" class="mono">0</div>
+      </div>
+    </div>
+
+    <h3 style="margin-top:12px">Monthly Totals</h3>
+    <div id="monthlyOut" style="margin-top:8px"></div>
+
+    <h3 style="margin-top:12px">Group by Voucher Type</h3>
+    <div id="vtypeOut" style="margin-top:8px"></div>
+  </section>
+
+  <footer style="margin-top:16px" class="small muted">Exported files include current filters and running-balance column. Data only stored in browser unless exported.</footer>
+</div>
+
+<!-- SheetJS for Excel export -->
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.20.2/dist/xlsx.full.min.js"></script>
+<script>
+(function(){
+  // Utilities
+  const $ = id => document.getElementById(id);
+  const lsKey = 'form_audit_entries_v1';
+  let entries = []; // {id,date,part,vtype,vno,debit,credit}
+  let editId = null;
+  // Elements
+  const tblBody = document.querySelector('#entriesTable tbody');
+  const f_date = $('f_date'), f_part = $('f_part'), f_vtype = $('f_vtype'), f_vno = $('f_vno'), f_debit = $('f_debit'), f_credit = $('f_credit');
+  const btnAdd = $('btnAdd'), btnUpdate = $('btnUpdate'), btnClear = $('btnClear'), btnClearAll = $('btnClearAll');
+  const filterMonth = $('filterMonth'), filterVtype = $('filterVtype'), btnApplyFilter = $('btnApplyFilter'), btnResetFilter = $('btnResetFilter');
+  const totalDebitEl = $('totalDebit'), totalCreditEl = $('totalCredit'), closingBalanceEl = $('closingBalance'), countEntriesEl = $('countEntries');
+  const monthlyOut = $('monthlyOut'), vtypeOut = $('vtypeOut');
+  const btnExportCSV = $('btnExportCSV'), btnExportXLS = $('btnExportXLS');
+
+  // Load initial from uploaded Excel: if the server had an original file, but we will try to prefill using embedded sample if localStorage empty
+  function load(){
+    try{
+      const s = localStorage.getItem(lsKey);
+      if(s){ entries = JSON.parse(s); }
+      else {
+        // If no saved entries, try to preload with sample rows from server-side (we embed none). Keep empty.
+        entries = [];
+      }
+    }catch(e){ entries = []; }
+    renderAll();
+  }
+  function save(){
+    localStorage.setItem(lsKey, JSON.stringify(entries));
+  }
+
+  // Add or update
+  btnAdd.addEventListener('click', ()=>{
+    const dt = f_date.value;
+    if(!dt){ alert('Please select Date'); return; }
+    const rec = {
+      id: Date.now().toString(),
+      date: dt,
+      part: f_part.value || '',
+      vtype: f_vtype.value || '',
+      vno: f_vno.value || '',
+      debit: parseFloat(f_debit.value || 0) || 0,
+      credit: parseFloat(f_credit.value || 0) || 0
     };
-    const drop = el('#drop');
-    const fileInput = el('#file');
-    const sheetSel = el('#sheetSelect');
-    const groupSel = el('#groupSelect');
-    const aggSel = el('#aggSelect');
-    const info = el('#fileInfo');
-    const btnAnalyze = el('#btnAnalyze');
-    const btnClear = el('#btnClear');
-    const btnGroup = el('#btnGroup');
-    const btnExportSummaryCSV = el('#btnExportSummaryCSV');
-    const btnExportSummaryJSON = el('#btnExportSummaryJSON');
-    const btnExportGroupCSV = el('#btnExportGroupCSV');
-    const btnDownloadTemplate = el('#btnDownloadTemplate');
-    const summaryBox = el('#summary');
-    const groupOut = el('#groupOut');
-    const tableWrap = el('#tableWrap');
+    entries.push(rec);
+    entries.sort((a,b)=> new Date(a.date) - new Date(b.date) || a.id - b.id);
+    save(); renderAll(); clearForm();
+  });
+  btnUpdate.addEventListener('click', ()=>{
+    if(!editId) return;
+    const rec = entries.find(r=>r.id===editId);
+    if(!rec) return;
+    rec.date = f_date.value; rec.part = f_part.value; rec.vtype = f_vtype.value; rec.vno = f_vno.value;
+    rec.debit = parseFloat(f_debit.value || 0) || 0; rec.credit = parseFloat(f_credit.value || 0) || 0;
+    entries.sort((a,b)=> new Date(a.date) - new Date(b.date) || a.id - b.id);
+    editId = null;
+    btnUpdate.style.display='none'; btnAdd.style.display='inline-block';
+    save(); renderAll(); clearForm();
+  });
+  btnClear.addEventListener('click', clearForm);
+  btnClearAll.addEventListener('click', ()=>{
+    if(!confirm('Clear all entries from browser storage?')) return;
+    entries = []; save(); renderAll();
+  });
 
-    let workbook = null;
-    let rawData = [];
-    let currentSheet = null;
-    let summary = null;
-    let groupResult = null;
+  function clearForm(){
+    editId = null; f_date.value=''; f_part.value=''; f_vtype.value=''; f_vno.value=''; f_debit.value='0'; f_credit.value='0';
+    btnUpdate.style.display='none'; btnAdd.style.display='inline-block';
+  }
 
-    // Template file (generated dynamically)
-    function generateTemplate(){
-      const wb = XLSX.utils.book_new();
-      const ws = XLSX.utils.aoa_to_sheet([
-        ["Date","Category","Item","Qty","Price","Amount"],
-        ["2025-01-01","A","Sample",2,100,200]
-      ]);
-      XLSX.utils.book_append_sheet(wb, ws, "Data");
-      const blob = XLSX.write(wb, {bookType:"xlsx", type:"array"});
-      const url = URL.createObjectURL(new Blob([blob], {type: "application/octet-stream"}));
-      btnDownloadTemplate.href = url;
+  // Render table, summaries
+  function renderAll(){
+    // Apply filters if any
+    const month = filterMonth.value; const vfilter = filterVtype.value;
+    let rows = entries.slice();
+    if(month){
+      rows = rows.filter(r=> r.date.startsWith(month));
+    }
+    if(vfilter){
+      rows = rows.filter(r=> r.vtype === vfilter);
+    }
+    // Ensure sorted by date
+    rows.sort((a,b)=> new Date(a.date) - new Date(b.date) || a.id - b.id);
+    // Calculate running balance
+    let running = 0;
+    const rendered = rows.map(r=>{
+      running += (Number(r.debit)||0) - (Number(r.credit)||0);
+      return Object.assign({}, r, {running: running});
+    });
+    // Table
+    tblBody.innerHTML = '';
+    rendered.forEach((r,i)=>{
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${i+1}</td><td>${r.date}</td><td>${escapeHtml(r.part)}</td><td>${escapeHtml(r.vtype)}</td><td>${escapeHtml(r.vno)}</td><td class="mono">${num(r.debit)}</td><td class="mono">${num(r.credit)}</td><td class="mono">${num(r.running)}</td><td><button data-id="${r.id}" class="editBtn">Edit</button> <button data-id="${r.id}" class="delBtn">Delete</button></td>`;
+      tblBody.appendChild(tr);
+    });
+    // wire actions
+    document.querySelectorAll('.editBtn').forEach(b=>b.addEventListener('click', e=>{
+      const id = e.currentTarget.dataset.id; startEdit(id);
+    }));
+    document.querySelectorAll('.delBtn').forEach(b=>b.addEventListener('click', e=>{
+      const id = e.currentTarget.dataset.id; if(!confirm('Delete this row?')) return;
+      entries = entries.filter(x=>x.id!==id); save(); renderAll();
+    }));
+
+    // Summaries (for ALL entries, not filtered)
+    const totalDebit = entries.reduce((s,r)=>s + (+r.debit||0),0);
+    const totalCredit = entries.reduce((s,r)=>s + (+r.credit||0),0);
+    totalDebitEl.textContent = num(totalDebit);
+    totalCreditEl.textContent = num(totalCredit);
+    closingBalanceEl.textContent = num(totalDebit - totalCredit);
+    countEntriesEl.textContent = entries.length;
+
+    // Monthly totals (group by YYYY-MM)
+    const months = {};
+    entries.forEach(r=>{
+      const m = r.date.slice(0,7); // YYYY-MM
+      if(!months[m]) months[m] = {debit:0, credit:0};
+      months[m].debit += +r.debit||0; months[m].credit += +r.credit||0;
+    });
+    monthlyOut.innerHTML = '';
+    if(Object.keys(months).length===0) monthlyOut.innerHTML = '<div class="small muted">No data</div>';
+    else{
+      const t = document.createElement('table'); t.style.width='100%';
+      t.innerHTML = '<thead><tr><th>Month</th><th>Total Debit</th><th>Total Credit</th><th>Difference</th></tr></thead>';
+      const tb = document.createElement('tbody');
+      Object.keys(months).sort().forEach(m=>{
+        const d = months[m]; const diff = d.debit - d.credit;
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${m}</td><td class="mono">${num(d.debit)}</td><td class="mono">${num(d.credit)}</td><td class="mono">${num(diff)}</td>`;
+        tb.appendChild(tr);
+      });
+      t.appendChild(tb); monthlyOut.appendChild(t);
     }
 
-    generateTemplate();
-
-    // Drag & drop
-    ;['dragenter','dragover'].forEach(ev => drop.addEventListener(ev, e => {e.preventDefault(); e.stopPropagation(); drop.classList.add('dragover');}));
-    ;['dragleave','drop'].forEach(ev => drop.addEventListener(ev, e => {e.preventDefault(); e.stopPropagation(); drop.classList.remove('dragover');}));
-    drop.addEventListener('drop', e => {
-      const f = e.dataTransfer.files?.[0];
-      if(f) loadFile(f);
+    // Group by vtype
+    const types = {};
+    entries.forEach(r=>{
+      const t = r.vtype || '(empty)'; if(!types[t]) types[t]={debit:0,credit:0,count:0};
+      types[t].debit += +r.debit||0; types[t].credit += +r.credit||0; types[t].count +=1;
     });
+    vtypeOut.innerHTML = '';
+    if(Object.keys(types).length===0) vtypeOut.innerHTML = '<div class="small muted">No data</div>';
+    else {
+      const t = document.createElement('table'); t.style.width='100%';
+      t.innerHTML = '<thead><tr><th>Vch Type</th><th>Count</th><th>Total Debit</th><th>Total Credit</th><th>Difference</th></tr></thead>';
+      const tb = document.createElement('tbody');
+      Object.keys(types).sort().forEach(k=>{
+        const d = types[k]; const diff = d.debit - d.credit;
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${escapeHtml(k)}</td><td>${d.count}</td><td class="mono">${num(d.debit)}</td><td class="mono">${num(d.credit)}</td><td class="mono">${num(diff)}</td>`;
+        tb.appendChild(tr);
+      });
+      t.appendChild(tb); vtypeOut.appendChild(t);
+    }
 
-    fileInput.addEventListener('change', e => {
-      const f = e.target.files?.[0];
-      if(f) loadFile(f);
+    // Populate vtype filter selector with unique types
+    const set = new Set(entries.map(r=>r.vtype || '').filter(x=>x!==''));
+    const old = filterVtype.value;
+    filterVtype.innerHTML = '<option value="">-- Filter Vch Type --</option>';
+    Array.from(set).sort().forEach(v=>{
+      const opt = document.createElement('option'); opt.value=v; opt.textContent=v; filterVtype.appendChild(opt);
     });
+    filterVtype.value = old || '';
 
-    function loadFile(file){
-      const reader = new FileReader();
-      const isCSV = /\.csv$/i.test(file.name);
-      reader.onload = (evt)=>{
-        try{
-          let data = evt.target.result;
-          if(isCSV){
-            const wb = XLSX.read(data, {type:'string'});
-            handleWorkbook(wb, file);
-          } else {
-            const wb = XLSX.read(data, {type:'binary'});
-            handleWorkbook(wb, file);
-          }
-        }catch(err){
-          alert('Failed to read file: ' + err.message);
-        }
+  }
+
+  function startEdit(id){
+    const rec = entries.find(x=>x.id===id);
+    if(!rec) return;
+    editId = id;
+    f_date.value = rec.date; f_part.value = rec.part; f_vtype.value = rec.vtype; f_vno.value = rec.vno;
+    f_debit.value = rec.debit; f_credit.value = rec.credit;
+    btnUpdate.style.display='inline-block'; btnAdd.style.display='none';
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  // Filters
+  btnApplyFilter.addEventListener('click', renderAll);
+  btnResetFilter.addEventListener('click', ()=>{ filterMonth.value=''; filterVtype.value=''; renderAll(); });
+
+  // Export to CSV/Excel (current filtered view with running balance)
+  function exportRows(){
+    const month = filterMonth.value; const vfilter = filterVtype.value;
+    let rows = entries.slice();
+    if(month) rows = rows.filter(r=> r.date.startsWith(month));
+    if(vfilter) rows = rows.filter(r=> r.vtype === vfilter);
+    rows.sort((a,b)=> new Date(a.date) - new Date(b.date) || a.id - b.id);
+    let running=0;
+    const out = rows.map((r,i)=>{
+      running += (Number(r.debit)||0) - (Number(r.credit)||0);
+      return {
+        '#': i+1,
+        Date: r.date,
+        Particulars: r.part,
+        'Vch Type': r.vtype,
+        'Vch No.': r.vno,
+        Debit: num(r.debit),
+        Credit: num(r.credit),
+        'Running Balance': num(running)
       };
-      if(isCSV) reader.readAsText(file);
-      else reader.readAsBinaryString(file);
-    }
-
-    function handleWorkbook(wb, file){
-      workbook = wb;
-      sheetSel.innerHTML = '';
-      wb.SheetNames.forEach(name => {
-        const opt = document.createElement('option');
-        opt.value = name; opt.textContent = name;
-        sheetSel.appendChild(opt);
-      });
-      currentSheet = wb.SheetNames[0];
-      info.textContent = `Loaded: ${file.name} • Sheets: ${wb.SheetNames.length}`;
-      renderSheet(currentSheet);
-    }
-
-    sheetSel.addEventListener('change', e => {
-      currentSheet = e.target.value;
-      renderSheet(currentSheet);
     });
+    return out;
+  }
 
-    function renderSheet(name){
-      const ws = workbook.Sheets[name];
-      const json = XLSX.utils.sheet_to_json(ws, {defval:null});
-      rawData = json;
-      renderTable(json);
-      prepareGroupControls(json);
-      summary = null;
-      groupResult = null;
-      summaryBox.innerHTML = '';
-      groupOut.innerHTML = '';
-      btnExportSummaryCSV.disabled = true;
-      btnExportSummaryJSON.disabled = true;
-      btnExportGroupCSV.disabled = true;
-    }
-
-    function renderTable(rows){
-      tbl.head.innerHTML = '';
-      tbl.body.innerHTML = '';
-
-      if(!rows.length){
-        tbl.head.innerHTML = '<tr><th>No data</th></tr>';
-        return;
-      }
-
-      const cols = Object.keys(rows[0]);
-      const trh = document.createElement('tr');
-      cols.forEach(c => {
-        const th = document.createElement('th');
-        th.textContent = c;
-        trh.appendChild(th);
-      });
-      tbl.head.appendChild(trh);
-
-      const MAX_ROWS = 1000; // cap render for performance
-      rows.slice(0, MAX_ROWS).forEach(r => {
-        const tr = document.createElement('tr');
-        cols.forEach(c => {
-          const td = document.createElement('td');
-          const v = r[c];
-          td.textContent = v===null ? '' : v;
-          tr.appendChild(td);
-        });
-        tbl.body.appendChild(tr);
-      });
-
-      if(rows.length > MAX_ROWS){
-        const tr = document.createElement('tr');
-        const td = document.createElement('td');
-        td.colSpan = cols.length;
-        td.className = 'muted';
-        td.textContent = `Showing first ${MAX_ROWS} of ${rows.length} rows…`;
-        tr.appendChild(td);
-        tbl.body.appendChild(tr);
-      }
-    }
-
-    // Analyze numeric columns
-    function isNumber(x){
-      return typeof x === 'number' && isFinite(x);
-    }
-    function toNumber(val){
-      if(typeof val === 'number') return val;
-      if(typeof val === 'string' && val.trim() !== ''){
-        const n = Number(val.replace(/[,\s]/g,''));
-        return isFinite(n) ? n : null;
-      }
-      return null;
-    }
-    function analyze(){
-      if(!rawData.length){ alert('No data to analyze'); return; }
-      const cols = Object.keys(rawData[0]);
-      const numericCols = cols.filter(c => rawData.some(r => isNumber(toNumber(r[c]))));
-      const stats = {};
-      numericCols.forEach(c => {
-        const vals = rawData.map(r => toNumber(r[c])).filter(v => v!==null);
-        if(!vals.length) return;
-        const count = vals.length;
-        const sum = vals.reduce((a,b)=>a+b, 0);
-        const mean = sum / count;
-        const min = Math.min.apply(null, vals);
-        const max = Math.max.apply(null, vals);
-        const variance = vals.reduce((a,b)=>a + Math.pow(b-mean,2), 0) / (count-1 || 1);
-        const std = Math.sqrt(variance);
-        stats[c] = {count, sum, mean, min, max, std};
-      });
-      summary = stats;
-      renderSummary(stats);
-      btnExportSummaryCSV.disabled = false;
-      btnExportSummaryJSON.disabled = false;
-    }
-
-    function renderSummary(stats){
-      if(!Object.keys(stats).length){
-        summaryBox.innerHTML = '<p class="muted">No numeric columns found.</p>';
-        return;
-      }
-      const headers = ['Column','count','sum','mean','min','max','std'];
-      const table = document.createElement('table');
-      const thead = document.createElement('thead');
-      const trh = document.createElement('tr');
-      headers.forEach(h => {
-        const th = document.createElement('th'); th.textContent = h; trh.appendChild(th);
-      });
-      thead.appendChild(trh);
-      table.appendChild(thead);
-      const tbody = document.createElement('tbody');
-      Object.entries(stats).forEach(([k,v])=>{
-        const tr = document.createElement('tr');
-        [k, v.count, v.sum, v.mean, v.min, v.max, v.std].forEach(x => {
-          const td = document.createElement('td');
-          td.textContent = typeof x === 'number' ? String(Math.round(x*1e6)/1e6) : x;
-          tr.appendChild(td);
-        });
-        tbody.appendChild(tr);
-      });
-      table.appendChild(tbody);
-      summaryBox.innerHTML = '';
-      summaryBox.appendChild(table);
-    }
-
-    // Group-by aggregation
-    function prepareGroupControls(rows){
-      groupSel.innerHTML = '';
-      if(!rows.length) return;
-      const cols = Object.keys(rows[0]);
-      cols.forEach(c => {
-        const opt = document.createElement('option');
-        opt.value = c; opt.textContent = c;
-        groupSel.appendChild(opt);
-      });
-    }
-
-    function groupBy(){
-      if(!rawData.length){ alert('No data'); return; }
-      const col = groupSel.value;
-      const agg = aggSel.value;
-      // Detect numeric columns for aggregation targets
-      const cols = Object.keys(rawData[0]).filter(c => c !== col);
-      const targetNumericCols = cols.filter(c => rawData.some(r => isNumber(toNumber(r[c]))));
-      if(!targetNumericCols.length){
-        groupOut.innerHTML = '<p class="muted">No numeric columns to aggregate.</p>';
-        return;
-      }
-      const groups = new Map();
-      rawData.forEach(r => {
-        const key = String(r[col]);
-        if(!groups.has(key)) groups.set(key, []);
-        groups.get(key).push(r);
-      });
-      const rows = [];
-      for(const [k, arr] of groups){
-        const out = { [col]: k };
-        targetNumericCols.forEach(tc => {
-          const vals = arr.map(r => toNumber(r[tc])).filter(v => v!==null);
-          if(!vals.length){ out[tc] = null; return; }
-          let val = null;
-          switch(agg){
-            case 'sum': val = vals.reduce((a,b)=>a+b,0); break;
-            case 'mean': val = vals.reduce((a,b)=>a+b,0)/vals.length; break;
-            case 'count': val = vals.length; break;
-            case 'min': val = Math.min.apply(null, vals); break;
-            case 'max': val = Math.max.apply(null, vals); break;
-          }
-          out[tc] = val;
-        });
-        rows.push(out);
-      }
-      // render
-      const table = document.createElement('table');
-      const thead = document.createElement('thead');
-      const trh = document.createElement('tr');
-      const headers = Object.keys(rows[0] || { [col]: col });
-      headers.forEach(h => { const th = document.createElement('th'); th.textContent=h; trh.appendChild(th); });
-      thead.appendChild(trh);
-      table.appendChild(thead);
-      const tbody = document.createElement('tbody');
-      rows.forEach(r => {
-        const tr = document.createElement('tr');
-        headers.forEach(h => {
-          const td = document.createElement('td');
-          const v = r[h];
-          td.textContent = (typeof v === 'number' && isFinite(v)) ? String(Math.round(v*1e6)/1e6) : (v ?? '');
-          tr.appendChild(td);
-        });
-        tbody.appendChild(tr);
-      });
-      table.appendChild(tbody);
-      groupOut.innerHTML = '';
-      groupOut.appendChild(table);
-      groupResult = rows;
-      btnExportGroupCSV.disabled = false;
-    }
-
-    // Export helpers
-    function toCSV(rows){
-      if(!rows || !rows.length) return '';
-      const cols = Object.keys(rows[0]);
-      const lines = [cols.join(',')];
-      rows.forEach(r => {
-        lines.push(cols.map(c => {
-          const v = r[c];
-          if(v === null || v === undefined) return '';
-          const s = String(v).replace(/"/g,'""');
-          return /[",\n]/.test(s) ? `"${s}"` : s;
-        }).join(','));
-      });
-      return lines.join('\n');
-    }
-
-    btnAnalyze.addEventListener('click', analyze);
-    btnClear.addEventListener('click', ()=>{
-      workbook = null; rawData = []; currentSheet = null; summary = null; groupResult = null;
-      tbl.head.innerHTML = ''; tbl.body.innerHTML = ''; sheetSel.innerHTML=''; groupSel.innerHTML='';
-      summaryBox.innerHTML = ''; groupOut.innerHTML = ''; info.textContent = '';
-      btnExportSummaryCSV.disabled = true; btnExportSummaryJSON.disabled = true; btnExportGroupCSV.disabled = true;
+  btnExportCSV.addEventListener('click', ()=>{
+    const rows = exportRows();
+    if(!rows.length){ alert('No rows to export'); return; }
+    const cols = Object.keys(rows[0]);
+    const lines = [cols.join(',')];
+    rows.forEach(r=>{
+      lines.push(cols.map(c=>`"${String(r[c]||'').replace(/"/g,'""')}"`).join(','));
     });
-    btnGroup.addEventListener('click', groupBy);
+    const blob = new Blob([lines.join('\\n')], {type:'text/csv'});
+    const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href=url; a.download='audit_export.csv'; a.click();
+    setTimeout(()=>URL.revokeObjectURL(url),2000);
+  });
 
-    btnExportSummaryCSV.addEventListener('click', ()=>{
-      if(!summary) return;
-      const rows = Object.entries(summary).map(([k,v])=>({Column:k, ...v}));
-      const csv = toCSV(rows);
-      const url = URL.createObjectURL(new Blob([csv], {type:'text/csv'}));
-      const a = document.createElement('a'); a.href = url; a.download = 'summary.csv'; a.click();
-      setTimeout(()=>URL.revokeObjectURL(url), 2000);
-    });
-    btnExportSummaryJSON.addEventListener('click', ()=>{
-      if(!summary) return;
-      const blob = new Blob([JSON.stringify(summary, null, 2)], {type:'application/json'});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a'); a.href = url; a.download = 'summary.json'; a.click();
-      setTimeout(()=>URL.revokeObjectURL(url), 2000);
-    });
-    btnExportGroupCSV.addEventListener('click', ()=>{
-      if(!groupResult) return;
-      const csv = toCSV(groupResult);
-      const url = URL.createObjectURL(new Blob([csv], {type:'text/csv'}));
-      const a = document.createElement('a'); a.href = url; a.download = 'groupby.csv'; a.click();
-      setTimeout(()=>URL.revokeObjectURL(url), 2000);
-    });
+  btnExportXLS.addEventListener('click', ()=>{
+    const rows = exportRows();
+    if(!rows.length){ alert('No rows to export'); return; }
+    const ws = XLSX.utils.json_to_sheet(rows);
+    const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, 'Audit');
+    const wbout = XLSX.write(wb, {bookType:'xlsx', type:'array'});
+    const blob = new Blob([wbout], {type:'application/octet-stream'});
+    const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href=url; a.download='audit_export.xlsx'; a.click();
+    setTimeout(()=>URL.revokeObjectURL(url),2000);
+  });
 
-    // keyboard shortcuts
-    document.addEventListener('keydown', (e)=>{
-      if(e.key.toLowerCase()==='a') btnAnalyze.click();
-      if(e.key.toLowerCase()==='g') groupSel.focus();
-      if(e.key.toLowerCase()==='c') btnClear.click();
-    });
-  </script>
+  // Helpers
+  function num(x){ return Number(x || 0).toFixed(2); }
+  function escapeHtml(s){ return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  // Keyboard: Enter in any field adds
+  document.getElementById('entryForm').addEventListener('keydown', (e)=>{
+    if(e.key==='Enter'){ e.preventDefault(); if(btnAdd.style.display!=='none') btnAdd.click(); else btnUpdate.click(); }
+  });
+
+  // Initialize
+  load();
+
+  // Expose for debugging (optional)
+  window._audit = {getEntries: ()=>entries, clear: ()=>{ entries=[]; save(); renderAll(); }};
+
+})();
+</script>
 </body>
 </html>

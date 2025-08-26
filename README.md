@@ -1,27 +1,23 @@
-# Excel Audit & Calculator (GitHub Pages)
+# Form-based Audit Ledger Site (from 1.jan audit.xlsx)
 
-A single-page web app that lets you upload Excel/CSV files, preview data, compute column-wise statistics, and run simple group-by aggregations — all **in the browser** (no server required).
+This static site provides a form-based interface matching the columns in your uploaded Excel (`1.jan audit.xlsx`):
+- Date
+- PARTICULARS
+- Vch Type
+- Vch No.
+- Debit
+- Credit
 
-## Features
-- Drag-and-drop or file picker to upload `.xlsx`, `.xls`, or `.csv`
-- Sheet selector (when multiple sheets exist)
-- Data preview (first 1000 rows for performance)
-- **Analysis** of numeric columns: `count`, `sum`, `mean`, `min`, `max`, `std`
-- **Group-by** (pivot-lite): choose a category column, then aggregate numeric columns with `sum`, `mean`, `count`, `min`, or `max`
-- Export results as **CSV** (summary & group-by) and **JSON** (summary)
-- Downloadable **template** workbook to start from
+Features included:
+- Add / Edit / Delete rows via form
+- Running Balance computed cumulatively (Debit - Credit) in date order
+- Monthly totals (group by YYYY-MM)
+- Group-by voucher type summary (count, totals, difference)
+- Filters by month and voucher type
+- Export current view to CSV or Excel (.xlsx)
+- Data stored in browser `localStorage` (no server)
+- Ready to deploy on GitHub Pages
 
-## How to Deploy on GitHub Pages
-1. Create a new repo on GitHub (e.g., `excel-audit`).
-2. Upload `index.html` to the root of the repo (you can add `README.md` too).
-3. In the repo: **Settings → Pages → Build and deployment → Deploy from a branch**.
-4. Choose branch `main` (or `master`) and folder `/root`, click **Save**.
-5. Wait for Pages to publish; your site will be live at the URL shown in the Pages section.
+## Deploy
+Upload `index.html` to a GitHub repo root and enable GitHub Pages (branch `main`, folder `/root`).
 
-> Tip: If you prefer a custom domain, add it in **Settings → Pages** after the site is live.
-
-## Local Testing
-Just double-click `index.html` to open it in your browser. Because the app runs entirely on the client side, it works from a local file too.
-
-## Privacy
-All processing happens in your browser. Files are **not** uploaded to any server.
