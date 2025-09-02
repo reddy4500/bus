@@ -1,369 +1,334 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Audit Ledger — Form Entry</title>
-<link rel="icon" href="data:;">
-<style>
-  body{font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial; background:#f4f7fb; color:#0b1730; margin:0; padding:20px}
-  .wrap{max-width:1100px;margin:0 auto}
-  header{display:flex;justify-content:space-between;align-items:center;gap:12px}
-  h1{margin:0;font-size:20px}
-  .card{background:white;border-radius:10px;padding:14px;box-shadow:0 6px 18px rgba(11,23,48,0.06); margin-top:16px}
-  form .row{display:flex;gap:8px;flex-wrap:wrap}
-  label{font-size:13px;color:#5b6b86}
-  input,select{padding:8px;border:1px solid #e7eef8;border-radius:8px;min-width:140px}
-  input[type=date]{min-width:160px}
-  button{padding:8px 12px;border-radius:8px;border:none;background:#0b66ff;color:white;cursor:pointer}
-  button.ghost{background:transparent;border:1px solid #cbdcf9;color:#123}
-  table{width:100%;border-collapse:collapse;margin-top:12px;font-size:13px}
-  th,td{padding:8px;border-bottom:1px solid #eef4fb;text-align:left}
-  .muted{color:#5b6b86;font-size:13px}
-  .controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-  .summary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:12px}
-  .pill{background:#f1f6ff;padding:8px;border-radius:8px;border:1px solid #e1ecff}
-  .right{margin-left:auto}
-  .mono{font-family:monospace;font-size:13px}
-  .small{font-size:12px;color:#5b6b86}
-  .actions{display:flex;gap:8px}
-  .danger{background:#ff5c6d}
-  .kbd{background:#eef4fb;padding:4px 8px;border-radius:6px;font-size:12px}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yaswanth Fleet Management</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js for graphs -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Using Inter as the default font */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Simple transition for smoother page changes */
+        .page {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
-<body>
-<div class="wrap">
-  <header>
-    <h1>Audit Ledger — Form Entry (from 1.jan audit.xlsx)</h1>
-    <div class="small">Client-side only • ready for GitHub Pages</div>
-  </header>
+<body class="bg-gradient-to-br from-blue-100 to-indigo-200 text-slate-800">
 
-  <section class="card" id="entryCard">
-    <h2 style="margin-top:0">Add / Edit Entry</h2>
-    <form id="entryForm" onsubmit="return false;">
-      <div class="row">
-        <label>Date<br/><input type="date" id="f_date" required></label>
-        <label>PARTICULARS<br/><input id="f_part" placeholder="Particulars"></label>
-        <label>Vch Type<br/><input id="f_vtype" placeholder="Voucher type"></label>
-        <label>Vch No.<br/><input id="f_vno" placeholder="Voucher no."></label>
-        <label>Debit<br/><input id="f_debit" type="number" step="0.01" min="0" value="0"></label>
-        <label>Credit<br/><input id="f_credit" type="number" step="0.01" min="0" value="0"></label>
-      </div>
-      <div style="margin-top:10px" class="controls">
-        <div class="actions">
-          <button id="btnAdd">Add Entry</button>
-          <button id="btnUpdate" class="ghost" style="display:none">Update</button>
-          <button id="btnClear" type="button" class="ghost">Clear</button>
+    <!-- Main Container -->
+    <div class="container mx-auto p-4 md:p-8 max-w-7xl">
+
+        <!-- Header -->
+        <header class="flex justify-between items-center mb-8 bg-white/80 backdrop-blur-lg fixed top-4 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] md:w-[calc(100%-4rem)] max-w-7xl z-50 p-4 md:p-6 rounded-xl shadow-lg shadow-slate-900/5">
+            <div class="flex items-center gap-3">
+                <!-- Bus Symbol -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-indigo-600" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M18 8a2 2 0 00-2-2H4a2 2 0 00-2 2v4a2 2 0 002 2h1v1a1 1 0 001 1h10a1 1 0 001-1v-1h1a2 2 0 002-2V8zm-6 3H8V8h4v3z" clip-rule="evenodd" />
+                </svg>
+                <h1 class="text-3xl font-bold text-indigo-600">Yaswanth</h1>
+            </div>
+            <nav class="hidden md:flex space-x-8">
+                <a href="#" onclick="showPage('home')" class="text-slate-600 hover:text-indigo-500 font-medium transition-colors">Home</a>
+                <a href="#" class="text-slate-600 hover:text-indigo-500 font-medium transition-colors">About Us</a>
+                <a href="#" class="text-slate-600 hover:text-indigo-500 font-medium transition-colors">Our Fleet</a>
+            </nav>
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-button" class="md:hidden text-slate-600 hover:text-indigo-500">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </header>
+
+        <!-- Mobile Menu (Hidden by default) -->
+        <div id="mobile-menu" class="hidden md:hidden bg-slate-50 rounded-xl shadow-lg mb-8 p-4 fixed top-24 left-4 right-4 z-40">
+            <a href="#" onclick="showPage('home')" class="block py-2 text-slate-600 hover:text-indigo-500 rounded-md px-3">Home</a>
+            <a href="#" class="block py-2 text-slate-600 hover:text-indigo-500 rounded-md px-3">About Us</a>
+            <a href="#" class="block py-2 text-slate-600 hover:text-indigo-500 rounded-md px-3">Our Fleet</a>
         </div>
-        <div class="right"><span class="small">Shortcut: Press <span class="kbd">Enter</span> to add</span></div>
-      </div>
-    </form>
-  </section>
 
-  <section class="card" id="tableCard">
-    <h2 style="margin-top:0">Entries</h2>
-    <div class="muted">Rows are stored in your browser. Edit / Delete as needed. Running balance is computed as cumulative (Debit - Credit) by date order.</div>
-    <div style="margin-top:12px" class="controls">
-      <input id="filterMonth" type="month" />
-      <select id="filterVtype"><option value="">-- Filter Vch Type --</option></select>
-      <button id="btnApplyFilter" class="ghost">Apply</button>
-      <button id="btnResetFilter" class="ghost">Reset</button>
-      <div class="right actions">
-        <button id="btnExportCSV" class="ghost">Export CSV</button>
-        <button id="btnExportXLS" class="ghost">Export Excel</button>
-        <button id="btnClearAll" class="danger">Clear All</button>
-      </div>
+        <!-- Spacer for fixed header -->
+        <div class="h-24"></div>
+
+        <!-- Page: Home -->
+        <main id="home" class="page">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold mb-2 text-slate-900">Fleet Audit Dashboard</h2>
+                <p class="text-slate-500 text-lg">Select an audit type to begin.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Monthly Audit Card -->
+                <div class="group bg-slate-50 p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer" onclick="showPage('monthly-audit-selection')">
+                    <div class="flex items-center justify-center h-16 w-16 rounded-full bg-indigo-100 text-indigo-600 mb-6 group-hover:bg-indigo-600 group-hover:text-white transition-colors">
+                         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-semibold mb-3 text-slate-800">Monthly Audit</h3>
+                    <p class="text-slate-500 mb-6">Review financial performance and operational data on a monthly basis.</p>
+                    <span class="font-semibold text-indigo-600 group-hover:underline">
+                        Go to Monthly Audits &rarr;
+                    </span>
+                </div>
+                <!-- Bus-wise Audit Card -->
+                <div class="group bg-slate-50 p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer" onclick="showPage('bus-wise-audit')">
+                     <div class="flex items-center justify-center h-16 w-16 rounded-full bg-teal-100 text-teal-600 mb-6 group-hover:bg-teal-600 group-hover:text-white transition-colors">
+                        <!-- Bus Symbol -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor">
+                          <path fill-rule="evenodd" d="M18 8a2 2 0 00-2-2H4a2 2 0 00-2 2v4a2 2 0 002 2h1v1a1 1 0 001 1h10a1 1 0 001-1v-1h1a2 2 0 002-2V8zm-6 3H8V8h4v3z" clip-rule="evenodd" />
+                          <path d="M4 4a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-semibold mb-3 text-slate-800">Bus-wise Audit</h3>
+                    <p class="text-slate-500 mb-6">Analyze profit vs. loss graphs and other key metrics for each bus.</p>
+                     <span class="font-semibold text-teal-600 group-hover:underline">
+                        Go to Bus-wise Analysis &rarr;
+                    </span>
+                </div>
+            </div>
+        </main>
+
+        <!-- Page: Monthly Audit Selection -->
+        <section id="monthly-audit-selection" class="page bg-slate-50 p-8 rounded-2xl shadow-lg">
+            <div class="flex items-center mb-8">
+                <button onclick="showPage('home')" class="flex items-center text-indigo-600 hover:text-indigo-800 font-medium transition-colors mr-6">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+                    </svg>
+                    Back
+                </button>
+                <h2 class="text-3xl font-bold text-slate-900">Select Audit Period</h2>
+            </div>
+            <div class="space-y-8">
+                <!-- Year 2025 -->
+                <div>
+                    <h3 class="text-xl font-semibold text-slate-700 mb-4 border-b pb-3">2025</h3>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                        <a href="#" onclick="showAuditFile('Jan 2025')" class="text-center font-medium p-4 bg-white shadow-sm border rounded-lg hover:bg-indigo-500 hover:text-white hover:shadow-lg transition-all duration-200 transform hover:scale-105">January</a>
+                        <a href="#" onclick="showAuditFile('Feb 2025')" class="text-center font-medium p-4 bg-white shadow-sm border rounded-lg hover:bg-indigo-500 hover:text-white hover:shadow-lg transition-all duration-200 transform hover:scale-105">February</a>
+                        <a href="#" onclick="showAuditFile('Mar 2025')" class="text-center font-medium p-4 bg-white shadow-sm border rounded-lg hover:bg-indigo-500 hover:text-white hover:shadow-lg transition-all duration-200 transform hover:scale-105">March</a>
+                        <a href="#" class="text-center font-medium p-4 bg-slate-100 text-slate-400 border rounded-lg cursor-not-allowed">April</a>
+                    </div>
+                </div>
+                <!-- Year 2024 -->
+                <div>
+                    <h3 class="text-xl font-semibold text-slate-700 mb-4 border-b pb-3">2024</h3>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                        <a href="#" onclick="showAuditFile('Jan 2024')" class="text-center font-medium p-4 bg-white shadow-sm border rounded-lg hover:bg-indigo-500 hover:text-white hover:shadow-lg transition-all duration-200 transform hover:scale-105">January</a>
+                        <a href="#" onclick="showAuditFile('Feb 2024')" class="text-center font-medium p-4 bg-white shadow-sm border rounded-lg hover:bg-indigo-500 hover:text-white hover:shadow-lg transition-all duration-200 transform hover:scale-105">February</a>
+                        <a href="#" onclick="showAuditFile('Mar 2024')" class="text-center font-medium p-4 bg-white shadow-sm border rounded-lg hover:bg-indigo-500 hover:text-white hover:shadow-lg transition-all duration-200 transform hover:scale-105">March</a>
+                        <a href="#" onclick="showAuditFile('Apr 2024')" class="text-center font-medium p-4 bg-white shadow-sm border rounded-lg hover:bg-indigo-500 hover:text-white hover:shadow-lg transition-all duration-200 transform hover:scale-105">April</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Page: Monthly Audit File -->
+        <section id="audit-file" class="page bg-slate-50 p-8 rounded-2xl shadow-lg">
+             <div class="flex items-center mb-6">
+                <button onclick="showPage('monthly-audit-selection')" class="flex items-center text-indigo-600 hover:text-indigo-800 font-medium transition-colors mr-6">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+                    </svg>
+                    Back
+                </button>
+                <h2 class="text-3xl font-bold text-slate-900">Audit File: <span id="audit-file-month"></span></h2>
+            </div>
+            <div class="overflow-x-auto rounded-lg border">
+                <table class="min-w-full">
+                    <thead class="bg-slate-100">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Date</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Description</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Revenue</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Expense</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Profit/Loss</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-slate-50 divide-y divide-slate-200" id="audit-table-body">
+                        <!-- Sample data will be injected here by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Page: Bus-wise Audit -->
+        <section id="bus-wise-audit" class="page bg-slate-50 p-8 rounded-2xl shadow-lg">
+            <div class="flex items-center mb-6">
+                <button onclick="showPage('home')" class="flex items-center text-indigo-600 hover:text-indigo-800 font-medium transition-colors mr-6">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+                    </svg>
+                    Back
+                </button>
+                <h2 class="text-3xl font-bold text-slate-900">Bus-wise Profit vs. Loss</h2>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-2 bg-slate-100 p-6 rounded-lg border">
+                    <h3 class="text-xl font-semibold mb-4 text-center">Quarterly Performance Overview</h3>
+                    <canvas id="busProfitLossChart"></canvas>
+                </div>
+                <div class="lg:col-span-1 bg-slate-100 p-6 rounded-lg border">
+                     <h3 class="text-xl font-semibold mb-4 text-center">Other Representations</h3>
+                     <p class="text-center text-slate-600 mb-4">Revenue by Bus</p>
+                     <canvas id="revenuePieChart"></canvas>
+                </div>
+            </div>
+        </section>
+
     </div>
 
-    <div id="tableWrap" style="overflow:auto;margin-top:12px">
-      <table id="entriesTable">
-        <thead><tr>
-          <th>#</th><th>Date</th><th>Particulars</th><th>Vch Type</th><th>Vch No.</th><th>Debit</th><th>Credit</th><th>Running Balance</th><th>Actions</th>
-        </tr></thead>
-        <tbody></tbody>
-      </table>
-    </div>
-  </section>
+    <script>
+        const pages = document.querySelectorAll('.page');
+        let profitLossChartInstance = null;
+        let revenuePieChartInstance = null;
 
-  <section class="card" id="summaryCard">
-    <h2 style="margin-top:0">Summaries & Reports</h2>
-    <div class="summary-grid">
-      <div class="pill">
-        <div class="small">Total Debit</div>
-        <div id="totalDebit" class="mono">0.00</div>
-      </div>
-      <div class="pill">
-        <div class="small">Total Credit</div>
-        <div id="totalCredit" class="mono">0.00</div>
-      </div>
-      <div class="pill">
-        <div class="small">Closing Balance (Debit - Credit)</div>
-        <div id="closingBalance" class="mono">0.00</div>
-      </div>
-      <div class="pill">
-        <div class="small">Number of Entries</div>
-        <div id="countEntries" class="mono">0</div>
-      </div>
-    </div>
+        // Function to switch between pages
+        function showPage(pageId) {
+            pages.forEach(page => {
+                page.style.display = 'none';
+            });
+            const activePage = document.getElementById(pageId);
+            if (activePage) {
+                activePage.style.display = 'block';
+            }
+            // Close mobile menu on navigation
+            document.getElementById('mobile-menu').classList.add('hidden');
 
-    <h3 style="margin-top:12px">Monthly Totals</h3>
-    <div id="monthlyOut" style="margin-top:8px"></div>
 
-    <h3 style="margin-top:12px">Group by Voucher Type</h3>
-    <div id="vtypeOut" style="margin-top:8px"></div>
-  </section>
+            // If we are showing the bus audit page, create the charts
+            if (pageId === 'bus-wise-audit') {
+                createBusProfitLossChart();
+                createRevenuePieChart();
+            }
+        }
 
-  <footer style="margin-top:16px" class="small muted">Exported files include current filters and running-balance column. Data only stored in browser unless exported.</footer>
-</div>
+        // Function to show a specific audit file
+        function showAuditFile(month) {
+            document.getElementById('audit-file-month').textContent = month;
+            generateSampleAuditData();
+            showPage('audit-file');
+        }
 
-<!-- SheetJS for Excel export -->
-<script src="https://cdn.jsdelivr.net/npm/xlsx@0.20.2/dist/xlsx.full.min.js"></script>
-<script>
-(function(){
-  // Utilities
-  const $ = id => document.getElementById(id);
-  const lsKey = 'form_audit_entries_v1';
-  let entries = []; // {id,date,part,vtype,vno,debit,credit}
-  let editId = null;
-  // Elements
-  const tblBody = document.querySelector('#entriesTable tbody');
-  const f_date = $('f_date'), f_part = $('f_part'), f_vtype = $('f_vtype'), f_vno = $('f_vno'), f_debit = $('f_debit'), f_credit = $('f_credit');
-  const btnAdd = $('btnAdd'), btnUpdate = $('btnUpdate'), btnClear = $('btnClear'), btnClearAll = $('btnClearAll');
-  const filterMonth = $('filterMonth'), filterVtype = $('filterVtype'), btnApplyFilter = $('btnApplyFilter'), btnResetFilter = $('btnResetFilter');
-  const totalDebitEl = $('totalDebit'), totalCreditEl = $('totalCredit'), closingBalanceEl = $('closingBalance'), countEntriesEl = $('countEntries');
-  const monthlyOut = $('monthlyOut'), vtypeOut = $('vtypeOut');
-  const btnExportCSV = $('btnExportCSV'), btnExportXLS = $('btnExportXLS');
+        // Generate sample data for the audit table
+        function generateSampleAuditData() {
+            const tableBody = document.getElementById('audit-table-body');
+            tableBody.innerHTML = ''; // Clear previous data
+            const rowCount = Math.floor(Math.random() * 8) + 5; // Random number of rows
+            for (let i = 1; i <= rowCount; i++) {
+                const revenue = Math.floor(Math.random() * 5000) + 1000;
+                const expense = Math.floor(Math.random() * 4000) + 500;
+                const profit = revenue - expense;
+                const profitClass = profit >= 0 ? 'text-green-600' : 'text-red-600';
+                const rowClass = i % 2 === 0 ? 'bg-slate-100' : 'bg-slate-50';
 
-  // Load initial from uploaded Excel: if the server had an original file, but we will try to prefill using embedded sample if localStorage empty
-  function load(){
-    try{
-      const s = localStorage.getItem(lsKey);
-      if(s){ entries = JSON.parse(s); }
-      else {
-        // If no saved entries, try to preload with sample rows from server-side (we embed none). Keep empty.
-        entries = [];
-      }
-    }catch(e){ entries = []; }
-    renderAll();
-  }
-  function save(){
-    localStorage.setItem(lsKey, JSON.stringify(entries));
-  }
+                const row = `
+                    <tr class="${rowClass}">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">2025-01-${String(i).padStart(2, '0')}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-900">Route Ticket Sales</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-green-600">₹${revenue.toLocaleString()}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-red-600">₹${expense.toLocaleString()}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium ${profitClass}">₹${profit.toLocaleString()}</td>
+                    </tr>
+                `;
+                tableBody.innerHTML += row;
+            }
+        }
 
-  // Add or update
-  btnAdd.addEventListener('click', ()=>{
-    const dt = f_date.value;
-    if(!dt){ alert('Please select Date'); return; }
-    const rec = {
-      id: Date.now().toString(),
-      date: dt,
-      part: f_part.value || '',
-      vtype: f_vtype.value || '',
-      vno: f_vno.value || '',
-      debit: parseFloat(f_debit.value || 0) || 0,
-      credit: parseFloat(f_credit.value || 0) || 0
-    };
-    entries.push(rec);
-    entries.sort((a,b)=> new Date(a.date) - new Date(b.date) || a.id - b.id);
-    save(); renderAll(); clearForm();
-  });
-  btnUpdate.addEventListener('click', ()=>{
-    if(!editId) return;
-    const rec = entries.find(r=>r.id===editId);
-    if(!rec) return;
-    rec.date = f_date.value; rec.part = f_part.value; rec.vtype = f_vtype.value; rec.vno = f_vno.value;
-    rec.debit = parseFloat(f_debit.value || 0) || 0; rec.credit = parseFloat(f_credit.value || 0) || 0;
-    entries.sort((a,b)=> new Date(a.date) - new Date(b.date) || a.id - b.id);
-    editId = null;
-    btnUpdate.style.display='none'; btnAdd.style.display='inline-block';
-    save(); renderAll(); clearForm();
-  });
-  btnClear.addEventListener('click', clearForm);
-  btnClearAll.addEventListener('click', ()=>{
-    if(!confirm('Clear all entries from browser storage?')) return;
-    entries = []; save(); renderAll();
-  });
+        // Function to create the Profit vs Loss bar chart
+        function createBusProfitLossChart() {
+            const ctx = document.getElementById('busProfitLossChart').getContext('2d');
+            if (profitLossChartInstance) {
+                profitLossChartInstance.destroy(); // Destroy old chart instance to prevent conflicts
+            }
+            profitLossChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Bus 101', 'Bus 102', 'Bus 103', 'Bus 104', 'Bus 105'],
+                    datasets: [{
+                        label: 'Profit',
+                        data: [12000, 19000, 3000, 5000, 22000],
+                        backgroundColor: 'rgba(34, 197, 94, 0.7)', 
+                        borderColor: 'rgba(22, 163, 74, 1)',
+                        borderWidth: 2,
+                        borderRadius: 6,
+                    }, {
+                        label: 'Loss',
+                        data: [-2000, -1000, -5000, -1500, -800],
+                        backgroundColor: 'rgba(239, 68, 68, 0.7)',
+                        borderColor: 'rgba(220, 38, 38, 1)',
+                        borderWidth: 2,
+                        borderRadius: 6,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '₹' + value.toLocaleString();
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Function to create the Revenue pie chart
+        function createRevenuePieChart() {
+            const ctx = document.getElementById('revenuePieChart').getContext('2d');
+             if (revenuePieChartInstance) {
+                revenuePieChartInstance.destroy(); // Destroy old chart instance
+            }
+            revenuePieChartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Bus 101', 'Bus 102', 'Bus 103', 'Bus 104', 'Bus 105'],
+                    datasets: [{
+                        label: 'Revenue',
+                        data: [35000, 48000, 15000, 22000, 51000],
+                        backgroundColor: [
+                            '#4f46e5', // Indigo
+                            '#10b981', // Emerald
+                            '#f59e0b', // Amber
+                            '#3b82f6', // Blue
+                            '#6366f1'  // Indigo Light
+                        ],
+                        hoverOffset: 8,
+                        borderColor: '#f1f5f9', // slate-100 for border
+                    }]
+                },
+                options: {
+                    responsive: true,
+                }
+            });
+        }
 
-  function clearForm(){
-    editId = null; f_date.value=''; f_part.value=''; f_vtype.value=''; f_vno.value=''; f_debit.value='0'; f_credit.value='0';
-    btnUpdate.style.display='none'; btnAdd.style.display='inline-block';
-  }
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
 
-  // Render table, summaries
-  function renderAll(){
-    // Apply filters if any
-    const month = filterMonth.value; const vfilter = filterVtype.value;
-    let rows = entries.slice();
-    if(month){
-      rows = rows.filter(r=> r.date.startsWith(month));
-    }
-    if(vfilter){
-      rows = rows.filter(r=> r.vtype === vfilter);
-    }
-    // Ensure sorted by date
-    rows.sort((a,b)=> new Date(a.date) - new Date(b.date) || a.id - b.id);
-    // Calculate running balance
-    let running = 0;
-    const rendered = rows.map(r=>{
-      running += (Number(r.debit)||0) - (Number(r.credit)||0);
-      return Object.assign({}, r, {running: running});
-    });
-    // Table
-    tblBody.innerHTML = '';
-    rendered.forEach((r,i)=>{
-      const tr = document.createElement('tr');
-      tr.innerHTML = `<td>${i+1}</td><td>${r.date}</td><td>${escapeHtml(r.part)}</td><td>${escapeHtml(r.vtype)}</td><td>${escapeHtml(r.vno)}</td><td class="mono">${num(r.debit)}</td><td class="mono">${num(r.credit)}</td><td class="mono">${num(r.running)}</td><td><button data-id="${r.id}" class="editBtn">Edit</button> <button data-id="${r.id}" class="delBtn">Delete</button></td>`;
-      tblBody.appendChild(tr);
-    });
-    // wire actions
-    document.querySelectorAll('.editBtn').forEach(b=>b.addEventListener('click', e=>{
-      const id = e.currentTarget.dataset.id; startEdit(id);
-    }));
-    document.querySelectorAll('.delBtn').forEach(b=>b.addEventListener('click', e=>{
-      const id = e.currentTarget.dataset.id; if(!confirm('Delete this row?')) return;
-      entries = entries.filter(x=>x.id!==id); save(); renderAll();
-    }));
 
-    // Summaries (for ALL entries, not filtered)
-    const totalDebit = entries.reduce((s,r)=>s + (+r.debit||0),0);
-    const totalCredit = entries.reduce((s,r)=>s + (+r.credit||0),0);
-    totalDebitEl.textContent = num(totalDebit);
-    totalCreditEl.textContent = num(totalCredit);
-    closingBalanceEl.textContent = num(totalDebit - totalCredit);
-    countEntriesEl.textContent = entries.length;
+        // Show the home page by default on load
+        window.onload = () => showPage('home');
+    </script>
 
-    // Monthly totals (group by YYYY-MM)
-    const months = {};
-    entries.forEach(r=>{
-      const m = r.date.slice(0,7); // YYYY-MM
-      if(!months[m]) months[m] = {debit:0, credit:0};
-      months[m].debit += +r.debit||0; months[m].credit += +r.credit||0;
-    });
-    monthlyOut.innerHTML = '';
-    if(Object.keys(months).length===0) monthlyOut.innerHTML = '<div class="small muted">No data</div>';
-    else{
-      const t = document.createElement('table'); t.style.width='100%';
-      t.innerHTML = '<thead><tr><th>Month</th><th>Total Debit</th><th>Total Credit</th><th>Difference</th></tr></thead>';
-      const tb = document.createElement('tbody');
-      Object.keys(months).sort().forEach(m=>{
-        const d = months[m]; const diff = d.debit - d.credit;
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${m}</td><td class="mono">${num(d.debit)}</td><td class="mono">${num(d.credit)}</td><td class="mono">${num(diff)}</td>`;
-        tb.appendChild(tr);
-      });
-      t.appendChild(tb); monthlyOut.appendChild(t);
-    }
-
-    // Group by vtype
-    const types = {};
-    entries.forEach(r=>{
-      const t = r.vtype || '(empty)'; if(!types[t]) types[t]={debit:0,credit:0,count:0};
-      types[t].debit += +r.debit||0; types[t].credit += +r.credit||0; types[t].count +=1;
-    });
-    vtypeOut.innerHTML = '';
-    if(Object.keys(types).length===0) vtypeOut.innerHTML = '<div class="small muted">No data</div>';
-    else {
-      const t = document.createElement('table'); t.style.width='100%';
-      t.innerHTML = '<thead><tr><th>Vch Type</th><th>Count</th><th>Total Debit</th><th>Total Credit</th><th>Difference</th></tr></thead>';
-      const tb = document.createElement('tbody');
-      Object.keys(types).sort().forEach(k=>{
-        const d = types[k]; const diff = d.debit - d.credit;
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${escapeHtml(k)}</td><td>${d.count}</td><td class="mono">${num(d.debit)}</td><td class="mono">${num(d.credit)}</td><td class="mono">${num(diff)}</td>`;
-        tb.appendChild(tr);
-      });
-      t.appendChild(tb); vtypeOut.appendChild(t);
-    }
-
-    // Populate vtype filter selector with unique types
-    const set = new Set(entries.map(r=>r.vtype || '').filter(x=>x!==''));
-    const old = filterVtype.value;
-    filterVtype.innerHTML = '<option value="">-- Filter Vch Type --</option>';
-    Array.from(set).sort().forEach(v=>{
-      const opt = document.createElement('option'); opt.value=v; opt.textContent=v; filterVtype.appendChild(opt);
-    });
-    filterVtype.value = old || '';
-
-  }
-
-  function startEdit(id){
-    const rec = entries.find(x=>x.id===id);
-    if(!rec) return;
-    editId = id;
-    f_date.value = rec.date; f_part.value = rec.part; f_vtype.value = rec.vtype; f_vno.value = rec.vno;
-    f_debit.value = rec.debit; f_credit.value = rec.credit;
-    btnUpdate.style.display='inline-block'; btnAdd.style.display='none';
-    window.scrollTo({top:0,behavior:'smooth'});
-  }
-
-  // Filters
-  btnApplyFilter.addEventListener('click', renderAll);
-  btnResetFilter.addEventListener('click', ()=>{ filterMonth.value=''; filterVtype.value=''; renderAll(); });
-
-  // Export to CSV/Excel (current filtered view with running balance)
-  function exportRows(){
-    const month = filterMonth.value; const vfilter = filterVtype.value;
-    let rows = entries.slice();
-    if(month) rows = rows.filter(r=> r.date.startsWith(month));
-    if(vfilter) rows = rows.filter(r=> r.vtype === vfilter);
-    rows.sort((a,b)=> new Date(a.date) - new Date(b.date) || a.id - b.id);
-    let running=0;
-    const out = rows.map((r,i)=>{
-      running += (Number(r.debit)||0) - (Number(r.credit)||0);
-      return {
-        '#': i+1,
-        Date: r.date,
-        Particulars: r.part,
-        'Vch Type': r.vtype,
-        'Vch No.': r.vno,
-        Debit: num(r.debit),
-        Credit: num(r.credit),
-        'Running Balance': num(running)
-      };
-    });
-    return out;
-  }
-
-  btnExportCSV.addEventListener('click', ()=>{
-    const rows = exportRows();
-    if(!rows.length){ alert('No rows to export'); return; }
-    const cols = Object.keys(rows[0]);
-    const lines = [cols.join(',')];
-    rows.forEach(r=>{
-      lines.push(cols.map(c=>`"${String(r[c]||'').replace(/"/g,'""')}"`).join(','));
-    });
-    const blob = new Blob([lines.join('\\n')], {type:'text/csv'});
-    const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href=url; a.download='audit_export.csv'; a.click();
-    setTimeout(()=>URL.revokeObjectURL(url),2000);
-  });
-
-  btnExportXLS.addEventListener('click', ()=>{
-    const rows = exportRows();
-    if(!rows.length){ alert('No rows to export'); return; }
-    const ws = XLSX.utils.json_to_sheet(rows);
-    const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, 'Audit');
-    const wbout = XLSX.write(wb, {bookType:'xlsx', type:'array'});
-    const blob = new Blob([wbout], {type:'application/octet-stream'});
-    const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href=url; a.download='audit_export.xlsx'; a.click();
-    setTimeout(()=>URL.revokeObjectURL(url),2000);
-  });
-
-  // Helpers
-  function num(x){ return Number(x || 0).toFixed(2); }
-  function escapeHtml(s){ return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-
-  // Keyboard: Enter in any field adds
-  document.getElementById('entryForm').addEventListener('keydown', (e)=>{
-    if(e.key==='Enter'){ e.preventDefault(); if(btnAdd.style.display!=='none') btnAdd.click(); else btnUpdate.click(); }
-  });
-
-  // Initialize
-  load();
-
-  // Expose for debugging (optional)
-  window._audit = {getEntries: ()=>entries, clear: ()=>{ entries=[]; save(); renderAll(); }};
-
-})();
-</script>
 </body>
 </html>
