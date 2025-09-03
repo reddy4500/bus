@@ -4,11 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YASWANTH </title>
-    <!-- Tailwind CSS for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Chart.js for graphs -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -26,17 +23,25 @@
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+        /* Style for editable cells */
+        [contenteditable="true"] {
+            cursor: pointer;
+            outline: none;
+            background-color: rgba(239, 246, 255, 0.5); /* Light blue tint */
+        }
+        [contenteditable="true"]:focus {
+            background-color: rgba(224, 231, 255, 1); /* Darker blue on focus */
+            box-shadow: 0 0 0 2px #4f46e5; /* Indigo ring */
+            border-radius: 4px;
+        }
     </style>
 </head>
 <body class="bg-gradient-to-br from-blue-100 to-indigo-200 text-slate-800">
 
-    <!-- Main Container -->
     <div class="container mx-auto p-4 md:p-8 max-w-7xl">
 
-        <!-- Header -->
         <header class="flex justify-between items-center mb-8 bg-white/80 backdrop-blur-lg fixed top-4 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] md:w-[calc(100%-4rem)] max-w-7xl z-50 p-4 md:p-6 rounded-xl shadow-lg shadow-slate-900/5">
             <div class="flex items-center gap-3">
-                <!-- Bus Symbol -->
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-indigo-600" viewBox="0 0 20 20" fill="currentColor">
                   <path fill-rule="evenodd" d="M18 8a2 2 0 00-2-2H4a2 2 0 00-2 2v4a2 2 0 002 2h1v1a1 1 0 001 1h10a1 1 0 001-1v-1h1a2 2 0 002-2V8zm-6 3H8V8h4v3z" clip-rule="evenodd" />
                 </svg>
@@ -47,30 +52,25 @@
                 <a href="#" class="text-slate-600 hover:text-indigo-500 font-medium transition-colors">About Us</a>
                 <a href="#" class="text-slate-600 hover:text-indigo-500 font-medium transition-colors">Our Fleet</a>
             </nav>
-            <!-- Mobile Menu Button -->
             <button id="mobile-menu-button" class="md:hidden text-slate-600 hover:text-indigo-500">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
             </button>
         </header>
 
-        <!-- Mobile Menu (Hidden by default) -->
         <div id="mobile-menu" class="hidden md:hidden bg-slate-50 rounded-xl shadow-lg mb-8 p-4 fixed top-24 left-4 right-4 z-40">
             <a href="#" onclick="showPage('home')" class="block py-2 text-slate-600 hover:text-indigo-500 rounded-md px-3">Home</a>
             <a href="#" class="block py-2 text-slate-600 hover:text-indigo-500 rounded-md px-3">About Us</a>
             <a href="#" class="block py-2 text-slate-600 hover:text-indigo-500 rounded-md px-3">Our Fleet</a>
         </div>
 
-        <!-- Spacer for fixed header -->
         <div class="h-24"></div>
 
-        <!-- Page: Home -->
         <main id="home" class="page">
             <div class="text-center mb-12">
                 <h2 class="text-4xl font-bold mb-2 text-slate-900">Dashboard</h2>
                 <p class="text-slate-500 text-lg">Begin.</p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <!-- Monthly Audit Card -->
                 <div class="group bg-slate-50 p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer" onclick="showPage('monthly-audit-selection')">
                     <div class="flex items-center justify-center h-16 w-16 rounded-full bg-indigo-100 text-indigo-600 mb-6 group-hover:bg-indigo-600 group-hover:text-white transition-colors">
                          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -83,10 +83,8 @@
                         Go to Monthly Audits &rarr;
                     </span>
                 </div>
-                <!-- Bus-wise Audit Card -->
                 <div class="group bg-slate-50 p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer" onclick="showPage('bus-wise-audit')">
                      <div class="flex items-center justify-center h-16 w-16 rounded-full bg-teal-100 text-teal-600 mb-6 group-hover:bg-teal-600 group-hover:text-white transition-colors">
-                        <!-- Bus Symbol -->
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor">
                           <path fill-rule="evenodd" d="M18 8a2 2 0 00-2-2H4a2 2 0 00-2 2v4a2 2 0 002 2h1v1a1 1 0 001 1h10a1 1 0 001-1v-1h1a2 2 0 002-2V8zm-6 3H8V8h4v3z" clip-rule="evenodd" />
                           <path d="M4 4a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1z" />
@@ -101,7 +99,6 @@
             </div>
         </main>
 
-        <!-- Page: Monthly Audit Selection -->
         <section id="monthly-audit-selection" class="page bg-slate-50 p-8 rounded-2xl shadow-lg">
             <div class="flex items-center mb-8">
                 <button onclick="showPage('home')" class="flex items-center text-indigo-600 hover:text-indigo-800 font-medium transition-colors mr-6">
@@ -113,7 +110,6 @@
                 <h2 class="text-3xl font-bold text-slate-900">Select Audit Period</h2>
             </div>
             <div class="space-y-8">
-                <!-- Year 2025 -->
                 <div>
                     <h3 class="text-xl font-semibold text-slate-700 mb-4 border-b pb-3">2025</h3>
                     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
@@ -123,7 +119,6 @@
                         <a href="#" class="text-center font-medium p-4 bg-slate-100 text-slate-400 border rounded-lg cursor-not-allowed">April</a>
                     </div>
                 </div>
-                <!-- Year 2024 -->
                 <div>
                     <h3 class="text-xl font-semibold text-slate-700 mb-4 border-b pb-3">2024</h3>
                     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
@@ -136,9 +131,8 @@
             </div>
         </section>
 
-        <!-- Page: Monthly Audit File -->
         <section id="audit-file" class="page bg-slate-50 p-8 rounded-2xl shadow-lg">
-             <div class="flex items-center mb-6">
+             <div class="flex items-center mb-1">
                 <button onclick="showPage('monthly-audit-selection')" class="flex items-center text-indigo-600 hover:text-indigo-800 font-medium transition-colors mr-6">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
                       <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
@@ -147,6 +141,7 @@
                 </button>
                 <h2 class="text-3xl font-bold text-slate-900">Audit File: <span id="audit-file-month"></span></h2>
             </div>
+            <p class="text-sm text-slate-500 mb-6 ml-16">Click on Description, Revenue, or Expense cells to edit values.</p>
             <div class="overflow-x-auto rounded-lg border">
                 <table class="min-w-full">
                     <thead class="bg-slate-100">
@@ -159,13 +154,11 @@
                         </tr>
                     </thead>
                     <tbody class="bg-slate-50 divide-y divide-slate-200" id="audit-table-body">
-                        <!-- Sample data will be injected here by JavaScript -->
-                    </tbody>
+                        </tbody>
                 </table>
             </div>
         </section>
 
-        <!-- Page: Bus-wise Audit -->
         <section id="bus-wise-audit" class="page bg-slate-50 p-8 rounded-2xl shadow-lg">
             <div class="flex items-center mb-6">
                 <button onclick="showPage('home')" class="flex items-center text-indigo-600 hover:text-indigo-800 font-medium transition-colors mr-6">
@@ -223,7 +216,7 @@
             showPage('audit-file');
         }
 
-        // Generate sample data for the audit table
+        // ⭐ MODIFIED: Generate sample data for the audit table
         function generateSampleAuditData() {
             const tableBody = document.getElementById('audit-table-body');
             tableBody.innerHTML = ''; // Clear previous data
@@ -236,17 +229,47 @@
                 const rowClass = i % 2 === 0 ? 'bg-slate-100' : 'bg-slate-50';
 
                 const row = `
-                    <tr class="${rowClass}">
+                    <tr class="${rowClass}" id="row-${i}">
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">2025-01-${String(i).padStart(2, '0')}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-900">Route Ticket Sales</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-green-600">₹${revenue.toLocaleString()}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-red-600">₹${expense.toLocaleString()}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium ${profitClass}">₹${profit.toLocaleString()}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-900" contenteditable="true">Route Ticket Sales</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-green-600 revenue-cell" contenteditable="true" onblur="updateProfitLoss(${i})">₹${revenue.toLocaleString()}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-red-600 expense-cell" contenteditable="true" onblur="updateProfitLoss(${i})">₹${expense.toLocaleString()}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium ${profitClass} profit-cell">₹${profit.toLocaleString()}</td>
                     </tr>
                 `;
                 tableBody.innerHTML += row;
             }
         }
+
+        // ⭐ NEW: Function to update profit/loss when a cell is edited
+        function updateProfitLoss(rowIndex) {
+            const row = document.getElementById(`row-${rowIndex}`);
+            if (!row) return;
+
+            const revenueCell = row.querySelector('.revenue-cell');
+            const expenseCell = row.querySelector('.expense-cell');
+            const profitCell = row.querySelector('.profit-cell');
+
+            // Helper to parse currency string to a number
+            const parseCurrency = (text) => {
+                // Remove currency symbols, commas, and whitespace
+                return parseFloat(text.replace(/[^0-9.-]+/g, "")) || 0;
+            };
+
+            const revenue = parseCurrency(revenueCell.innerText);
+            const expense = parseCurrency(expenseCell.innerText);
+            const profit = revenue - expense;
+
+            // Update the profit cell's text and color
+            profitCell.innerText = '₹' + profit.toLocaleString();
+            profitCell.classList.remove('text-green-600', 'text-red-600');
+            profitCell.classList.add(profit >= 0 ? 'text-green-600' : 'text-red-600');
+
+            // Re-format the edited cells to ensure currency symbol and formatting are consistent
+            revenueCell.innerText = '₹' + revenue.toLocaleString();
+            expenseCell.innerText = '₹' + expense.toLocaleString();
+        }
+
 
         // Function to create the Profit vs Loss bar chart
         function createBusProfitLossChart() {
