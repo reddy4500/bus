@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YASWANTH </title>
+    <title>Yaswanth Fleet Management</title>
     <!-- Tailwind CSS for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Chart.js for graphs -->
@@ -12,21 +12,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        /* Using Inter as the default font */
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-        /* Simple transition for smoother page changes */
-        .page {
-            display: none;
-            animation: fadeIn 0.5s ease-in-out;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-    </style>
+    <!-- Link to your custom stylesheet -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body class="bg-gradient-to-br from-blue-100 to-indigo-200 text-slate-800">
 
@@ -66,8 +53,8 @@
         <!-- Page: Home -->
         <main id="home" class="page">
             <div class="text-center mb-12">
-                <h2 class="text-4xl font-bold mb-2 text-slate-900">Dashboard</h2>
-                <p class="text-slate-500 text-lg">Begin.</p>
+                <h2 class="text-4xl font-bold mb-2 text-slate-900">Fleet Audit Dashboard</h2>
+                <p class="text-slate-500 text-lg">Select an audit type to begin.</p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <!-- Monthly Audit Card -->
@@ -88,7 +75,7 @@
                      <div class="flex items-center justify-center h-16 w-16 rounded-full bg-teal-100 text-teal-600 mb-6 group-hover:bg-teal-600 group-hover:text-white transition-colors">
                         <!-- Bus Symbol -->
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor">
-                          <path fill-rule="evenodd" d="M18 8a2 2 0 00-2-2H4a2 2 0 00-2 2v4a2 2 0 002 2h1v1a1 1 0 001 1h10a1 1 0 001-1v-1h1a2 2 0 002-2V8zm-6 3H8V8h4v3z" clip-rule="evenodd" />
+                          <path fill-rule="evenodd" d="M18 8a2 2 S.NO0 00-2-2H4a2 2 0 00-2 2v4a2 2 0 002 2h1v1a1 1 0 001 1h10a1 1 0 001-1v-1h1a2 2 0 002-2V8zm-6 3H8V8h4v3z" clip-rule="evenodd" />
                           <path d="M4 4a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1z" />
                         </svg>
                     </div>
@@ -138,29 +125,57 @@
 
         <!-- Page: Monthly Audit File -->
         <section id="audit-file" class="page bg-slate-50 p-8 rounded-2xl shadow-lg">
-             <div class="flex items-center mb-6">
-                <button onclick="showPage('monthly-audit-selection')" class="flex items-center text-indigo-600 hover:text-indigo-800 font-medium transition-colors mr-6">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                      <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
-                    </svg>
-                    Back
-                </button>
-                <h2 class="text-3xl font-bold text-slate-900">Audit File: <span id="audit-file-month"></span></h2>
+             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
+                <div class="flex items-center">
+                     <button onclick="showPage('monthly-audit-selection')" class="flex items-center text-indigo-600 hover:text-indigo-800 font-medium transition-colors mr-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                          <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+                        </svg>
+                        Back
+                    </button>
+                    <h2 class="text-2xl md:text-3xl font-bold text-slate-900">Audit File: <span id="audit-file-month"></span></h2>
+                </div>
+                <button id="add-row-btn" class="bg-indigo-600 text-white font-semibold px-4 py-2 rounded-lg shadow-md hover:bg-indigo-700 transition-colors self-start sm:self-center">Add Row</button>
             </div>
-            <div class="overflow-x-auto rounded-lg border">
-                <table class="min-w-full">
-                    <thead class="bg-slate-100">
+            <div class="overflow-x-auto rounded-lg border border-slate-200">
+                <table class="min-w-full text-sm">
+                    <thead class="bg-slate-100 text-left">
                         <tr>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Date</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Description</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Revenue</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Expense</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Profit/Loss</th>
+                            <th class="p-3 font-semibold text-slate-600">S.NO</th>
+                            <th class="p-3 font-semibold text-slate-600">Name</th>
+                            <th class="p-3 font-semibold text-slate-600">Vehicle No</th>
+                            <th class="p-3 font-semibold text-slate-600">Opt KMS</th>
+                            <th class="p-3 font-semibold text-slate-600">Slab Rate</th>
+                            <th class="p-3 font-semibold text-slate-600">Amount Payable</th>
+                            <th class="p-3 font-semibold text-slate-600">Ins. Reim.</th>
+                            <th class="p-3 font-semibold text-slate-600">Oil Saved</th>
+                            <th class="p-3 font-semibold text-slate-600">Total Payable</th>
+                            <th class="p-3 font-semibold text-slate-600">Income Tax</th>
+                            <th class="p-3 font-semibold text-slate-600">Penalty</th>
+                            <th class="p-3 font-semibold text-slate-600">Less Others</th>
+                            <th class="p-3 font-semibold text-slate-600">Total Deductions</th>
+                            <th class="p-3 font-semibold text-slate-600">Net Payable</th>
+                            <th class="p-3 font-semibold text-slate-600">Actions</th>
                         </tr>
                     </thead>
                     <tbody class="bg-slate-50 divide-y divide-slate-200" id="audit-table-body">
-                        <!-- Sample data will be injected here by JavaScript -->
+                        <!-- Editable data will be injected here by JavaScript -->
                     </tbody>
+                    <tfoot class="bg-slate-200 font-bold">
+                        <tr>
+                            <td colspan="5" class="p-3 text-right text-slate-800">Totals:</td>
+                            <td id="total-amount-payable" class="p-3 text-slate-800"></td>
+                            <td id="total-ins-reim" class="p-3 text-slate-800"></td>
+                            <td id="total-oil-saved" class="p-3 text-slate-800"></td>
+                            <td id="total-payable" class="p-3 text-indigo-700"></td>
+                            <td id="total-income-tax" class="p-3 text-slate-800"></td>
+                            <td id="total-penalty" class="p-3 text-slate-800"></td>
+                            <td id="total-less-others" class="p-3 text-slate-800"></td>
+                            <td id="total-deductions" class="p-3 text-red-700"></td>
+                            <td id="total-net-payable" class="p-3 text-green-700"></td>
+                            <td class="p-3"></td>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
         </section>
@@ -191,144 +206,7 @@
 
     </div>
 
-    <script>
-        const pages = document.querySelectorAll('.page');
-        let profitLossChartInstance = null;
-        let revenuePieChartInstance = null;
-
-        // Function to switch between pages
-        function showPage(pageId) {
-            pages.forEach(page => {
-                page.style.display = 'none';
-            });
-            const activePage = document.getElementById(pageId);
-            if (activePage) {
-                activePage.style.display = 'block';
-            }
-            // Close mobile menu on navigation
-            document.getElementById('mobile-menu').classList.add('hidden');
-
-
-            // If we are showing the bus audit page, create the charts
-            if (pageId === 'bus-wise-audit') {
-                createBusProfitLossChart();
-                createRevenuePieChart();
-            }
-        }
-
-        // Function to show a specific audit file
-        function showAuditFile(month) {
-            document.getElementById('audit-file-month').textContent = month;
-            generateSampleAuditData();
-            showPage('audit-file');
-        }
-
-        // Generate sample data for the audit table
-        function generateSampleAuditData() {
-            const tableBody = document.getElementById('audit-table-body');
-            tableBody.innerHTML = ''; // Clear previous data
-            const rowCount = Math.floor(Math.random() * 8) + 5; // Random number of rows
-            for (let i = 1; i <= rowCount; i++) {
-                const revenue = Math.floor(Math.random() * 5000) + 1000;
-                const expense = Math.floor(Math.random() * 4000) + 500;
-                const profit = revenue - expense;
-                const profitClass = profit >= 0 ? 'text-green-600' : 'text-red-600';
-                const rowClass = i % 2 === 0 ? 'bg-slate-100' : 'bg-slate-50';
-
-                const row = `
-                    <tr class="${rowClass}">
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">2025-01-${String(i).padStart(2, '0')}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-900">Route Ticket Sales</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-green-600">₹${revenue.toLocaleString()}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-red-600">₹${expense.toLocaleString()}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium ${profitClass}">₹${profit.toLocaleString()}</td>
-                    </tr>
-                `;
-                tableBody.innerHTML += row;
-            }
-        }
-
-        // Function to create the Profit vs Loss bar chart
-        function createBusProfitLossChart() {
-            const ctx = document.getElementById('busProfitLossChart').getContext('2d');
-            if (profitLossChartInstance) {
-                profitLossChartInstance.destroy(); // Destroy old chart instance to prevent conflicts
-            }
-            profitLossChartInstance = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['Bus 101', 'Bus 102', 'Bus 103', 'Bus 104', 'Bus 105'],
-                    datasets: [{
-                        label: 'Profit',
-                        data: [12000, 19000, 3000, 5000, 22000],
-                        backgroundColor: 'rgba(34, 197, 94, 0.7)', 
-                        borderColor: 'rgba(22, 163, 74, 1)',
-                        borderWidth: 2,
-                        borderRadius: 6,
-                    }, {
-                        label: 'Loss',
-                        data: [-2000, -1000, -5000, -1500, -800],
-                        backgroundColor: 'rgba(239, 68, 68, 0.7)',
-                        borderColor: 'rgba(220, 38, 38, 1)',
-                        borderWidth: 2,
-                        borderRadius: 6,
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                callback: function(value) {
-                                    return '₹' + value.toLocaleString();
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-        }
-        
-        // Function to create the Revenue pie chart
-        function createRevenuePieChart() {
-            const ctx = document.getElementById('revenuePieChart').getContext('2d');
-             if (revenuePieChartInstance) {
-                revenuePieChartInstance.destroy(); // Destroy old chart instance
-            }
-            revenuePieChartInstance = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Bus 101', 'Bus 102', 'Bus 103', 'Bus 104', 'Bus 105'],
-                    datasets: [{
-                        label: 'Revenue',
-                        data: [35000, 48000, 15000, 22000, 51000],
-                        backgroundColor: [
-                            '#4f46e5', // Indigo
-                            '#10b981', // Emerald
-                            '#f59e0b', // Amber
-                            '#3b82f6', // Blue
-                            '#6366f1'  // Indigo Light
-                        ],
-                        hoverOffset: 8,
-                        borderColor: '#f1f5f9', // slate-100 for border
-                    }]
-                },
-                options: {
-                    responsive: true,
-                }
-            });
-        }
-
-        // Mobile menu toggle
-        document.getElementById('mobile-menu-button').addEventListener('click', function() {
-            document.getElementById('mobile-menu').classList.toggle('hidden');
-        });
-
-
-        // Show the home page by default on load
-        window.onload = () => showPage('home');
-    </script>
-
+    <!-- Link to your JavaScript file -->
+    <script src="script.js"></script>
 </body>
 </html>
