@@ -3,211 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yaswanth Fleet Management</title>
-    <!-- Tailwind CSS for styling -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Chart.js for graphs -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Google Fonts: Inter -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Link to your custom stylesheet -->
-    <link rel="stylesheet" href="style.css">
+    <title>Audit Portal - Payment Management</title>
+    <link rel="stylesheet" href="css/styles.css">
 </head>
-<body class="bg-gradient-to-br from-blue-100 to-indigo-200 text-slate-800">
+<body>
+    <header>
+        <h1>Audit Portal - Payment Management</h1>
+    </header>
 
-    <!-- Main Container -->
-    <div class="container mx-auto p-4 md:p-8 max-w-7xl">
-
-        <!-- Header -->
-        <header class="flex justify-between items-center mb-8 bg-white/80 backdrop-blur-lg fixed top-4 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] md:w-[calc(100%-4rem)] max-w-7xl z-50 p-4 md:p-6 rounded-xl shadow-lg shadow-slate-900/5">
-            <div class="flex items-center gap-3">
-                <!-- Bus Symbol -->
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-indigo-600" viewBox="0 0 20 20" fill="currentColor">
-                  <path fill-rule="evenodd" d="M18 8a2 2 0 00-2-2H4a2 2 0 00-2 2v4a2 2 0 002 2h1v1a1 1 0 001 1h10a1 1 0 001-1v-1h1a2 2 0 002-2V8zm-6 3H8V8h4v3z" clip-rule="evenodd" />
-                </svg>
-                <h1 class="text-3xl font-bold text-indigo-600">Yaswanth</h1>
-            </div>
-            <nav class="hidden md:flex space-x-8">
-                <a href="#" onclick="showPage('home')" class="text-slate-600 hover:text-indigo-500 font-medium transition-colors">Home</a>
-                <a href="#" class="text-slate-600 hover:text-indigo-500 font-medium transition-colors">About Us</a>
-                <a href="#" class="text-slate-600 hover:text-indigo-500 font-medium transition-colors">Our Fleet</a>
-            </nav>
-            <!-- Mobile Menu Button -->
-            <button id="mobile-menu-button" class="md:hidden text-slate-600 hover:text-indigo-500">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
-            </button>
-        </header>
-
-        <!-- Mobile Menu (Hidden by default) -->
-        <div id="mobile-menu" class="hidden md:hidden bg-slate-50 rounded-xl shadow-lg mb-8 p-4 fixed top-24 left-4 right-4 z-40">
-            <a href="#" onclick="showPage('home')" class="block py-2 text-slate-600 hover:text-indigo-500 rounded-md px-3">Home</a>
-            <a href="#" class="block py-2 text-slate-600 hover:text-indigo-500 rounded-md px-3">About Us</a>
-            <a href="#" class="block py-2 text-slate-600 hover:text-indigo-500 rounded-md px-3">Our Fleet</a>
+    <main>
+        <div class="controls">
+            <button onclick="addRow()">➕ Add Row</button>
+            <button onclick="exportToExcel()">📊 Export to Excel</button>
+            <button onclick="exportToPDF()">📑 Export to PDF</button>
         </div>
 
-        <!-- Spacer for fixed header -->
-        <div class="h-24"></div>
+        <div class="table-container">
+            <table id="audit-table">
+                <thead>
+                    <tr>
+                        <th>S.NO</th>
+                        <th>Employee Name</th>
+                        <th>Emp. Code</th>
+                        <th>Opt. KMs</th>
+                        <th>Slab Rate</th>
+                        <th>Amount Payable</th>
+                        <th>Ins. Reim</th>
+                        <th>Oil Saved</th>
+                        <th>Total Payable</th>
+                        <th>Income Tax</th>
+                        <th>Penalty</th>
+                        <th>Less Others</th>
+                        <th>Total Deductions</th>
+                        <th>Net Payable</th>
+                    </tr>
+                </thead>
+                <tbody id="audit-table-body">
+                    <!-- Dynamic Rows -->
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th colspan="5">Totals</th>
+                        <th id="total-amount-payable">0.00</th>
+                        <th id="total-ins-reim">0.00</th>
+                        <th id="total-oil-saved">0.00</th>
+                        <th id="total-payable">0.00</th>
+                        <th id="total-income-tax">0.00</th>
+                        <th id="total-penalty">0.00</th>
+                        <th id="total-less-others">0.00</th>
+                        <th id="total-deductions">0.00</th>
+                        <th id="total-net-payable">0.00</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </main>
 
-        <!-- Page: Home -->
-        <main id="home" class="page">
-            <div class="text-center mb-12">
-                <h2 class="text-4xl font-bold mb-2 text-slate-900">Fleet Audit Dashboard</h2>
-                <p class="text-slate-500 text-lg">Select an audit type to begin.</p>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <!-- Monthly Audit Card -->
-                <div class="group bg-slate-50 p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer" onclick="showPage('monthly-audit-selection')">
-                    <div class="flex items-center justify-center h-16 w-16 rounded-full bg-indigo-100 text-indigo-600 mb-6 group-hover:bg-indigo-600 group-hover:text-white transition-colors">
-                         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
-                    </div>
-                    <h3 class="text-2xl font-semibold mb-3 text-slate-800">Monthly Audit</h3>
-                    <p class="text-slate-500 mb-6">Review financial performance and operational data on a monthly basis.</p>
-                    <span class="font-semibold text-indigo-600 group-hover:underline">
-                        Go to Monthly Audits &rarr;
-                    </span>
-                </div>
-                <!-- Bus-wise Audit Card -->
-                <div class="group bg-slate-50 p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer" onclick="showPage('bus-wise-audit')">
-                     <div class="flex items-center justify-center h-16 w-16 rounded-full bg-teal-100 text-teal-600 mb-6 group-hover:bg-teal-600 group-hover:text-white transition-colors">
-                        <!-- Bus Symbol -->
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor">
-                          <path fill-rule="evenodd" d="M18 8a2 2 S.NO0 00-2-2H4a2 2 0 00-2 2v4a2 2 0 002 2h1v1a1 1 0 001 1h10a1 1 0 001-1v-1h1a2 2 0 002-2V8zm-6 3H8V8h4v3z" clip-rule="evenodd" />
-                          <path d="M4 4a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1z" />
-                        </svg>
-                    </div>
-                    <h3 class="text-2xl font-semibold mb-3 text-slate-800">Bus-wise Audit</h3>
-                    <p class="text-slate-500 mb-6">Analyze profit vs. loss graphs and other key metrics for each bus.</p>
-                     <span class="font-semibold text-teal-600 group-hover:underline">
-                        Go to Bus-wise Analysis &rarr;
-                    </span>
-                </div>
-            </div>
-        </main>
-
-        <!-- Page: Monthly Audit Selection -->
-        <section id="monthly-audit-selection" class="page bg-slate-50 p-8 rounded-2xl shadow-lg">
-            <div class="flex items-center mb-8">
-                <button onclick="showPage('home')" class="flex items-center text-indigo-600 hover:text-indigo-800 font-medium transition-colors mr-6">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                      <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
-                    </svg>
-                    Back
-                </button>
-                <h2 class="text-3xl font-bold text-slate-900">Select Audit Period</h2>
-            </div>
-            <div class="space-y-8">
-                <!-- Year 2025 -->
-                <div>
-                    <h3 class="text-xl font-semibold text-slate-700 mb-4 border-b pb-3">2025</h3>
-                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                        <a href="#" onclick="showAuditFile('Jan 2025')" class="text-center font-medium p-4 bg-white shadow-sm border rounded-lg hover:bg-indigo-500 hover:text-white hover:shadow-lg transition-all duration-200 transform hover:scale-105">January</a>
-                        <a href="#" onclick="showAuditFile('Feb 2025')" class="text-center font-medium p-4 bg-white shadow-sm border rounded-lg hover:bg-indigo-500 hover:text-white hover:shadow-lg transition-all duration-200 transform hover:scale-105">February</a>
-                        <a href="#" onclick="showAuditFile('Mar 2025')" class="text-center font-medium p-4 bg-white shadow-sm border rounded-lg hover:bg-indigo-500 hover:text-white hover:shadow-lg transition-all duration-200 transform hover:scale-105">March</a>
-                        <a href="#" class="text-center font-medium p-4 bg-slate-100 text-slate-400 border rounded-lg cursor-not-allowed">April</a>
-                    </div>
-                </div>
-                <!-- Year 2024 -->
-                <div>
-                    <h3 class="text-xl font-semibold text-slate-700 mb-4 border-b pb-3">2024</h3>
-                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                        <a href="#" onclick="showAuditFile('Jan 2024')" class="text-center font-medium p-4 bg-white shadow-sm border rounded-lg hover:bg-indigo-500 hover:text-white hover:shadow-lg transition-all duration-200 transform hover:scale-105">January</a>
-                        <a href="#" onclick="showAuditFile('Feb 2024')" class="text-center font-medium p-4 bg-white shadow-sm border rounded-lg hover:bg-indigo-500 hover:text-white hover:shadow-lg transition-all duration-200 transform hover:scale-105">February</a>
-                        <a href="#" onclick="showAuditFile('Mar 2024')" class="text-center font-medium p-4 bg-white shadow-sm border rounded-lg hover:bg-indigo-500 hover:text-white hover:shadow-lg transition-all duration-200 transform hover:scale-105">March</a>
-                        <a href="#" onclick="showAuditFile('Apr 2024')" class="text-center font-medium p-4 bg-white shadow-sm border rounded-lg hover:bg-indigo-500 hover:text-white hover:shadow-lg transition-all duration-200 transform hover:scale-105">April</a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Page: Monthly Audit File -->
-        <section id="audit-file" class="page bg-slate-50 p-8 rounded-2xl shadow-lg">
-             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
-                <div class="flex items-center">
-                     <button onclick="showPage('monthly-audit-selection')" class="flex items-center text-indigo-600 hover:text-indigo-800 font-medium transition-colors mr-6">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                          <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
-                        </svg>
-                        Back
-                    </button>
-                    <h2 class="text-2xl md:text-3xl font-bold text-slate-900">Audit File: <span id="audit-file-month"></span></h2>
-                </div>
-                <button id="add-row-btn" class="bg-indigo-600 text-white font-semibold px-4 py-2 rounded-lg shadow-md hover:bg-indigo-700 transition-colors self-start sm:self-center">Add Row</button>
-            </div>
-            <div class="overflow-x-auto rounded-lg border border-slate-200">
-                <table class="min-w-full text-sm">
-                    <thead class="bg-slate-100 text-left">
-                        <tr>
-                            <th class="p-3 font-semibold text-slate-600">S.NO</th>
-                            <th class="p-3 font-semibold text-slate-600">Name</th>
-                            <th class="p-3 font-semibold text-slate-600">Vehicle No</th>
-                            <th class="p-3 font-semibold text-slate-600">Opt KMS</th>
-                            <th class="p-3 font-semibold text-slate-600">Slab Rate</th>
-                            <th class="p-3 font-semibold text-slate-600">Amount Payable</th>
-                            <th class="p-3 font-semibold text-slate-600">Ins. Reim.</th>
-                            <th class="p-3 font-semibold text-slate-600">Oil Saved</th>
-                            <th class="p-3 font-semibold text-slate-600">Total Payable</th>
-                            <th class="p-3 font-semibold text-slate-600">Income Tax</th>
-                            <th class="p-3 font-semibold text-slate-600">Penalty</th>
-                            <th class="p-3 font-semibold text-slate-600">Less Others</th>
-                            <th class="p-3 font-semibold text-slate-600">Total Deductions</th>
-                            <th class="p-3 font-semibold text-slate-600">Net Payable</th>
-                            <th class="p-3 font-semibold text-slate-600">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-slate-50 divide-y divide-slate-200" id="audit-table-body">
-                        <!-- Editable data will be injected here by JavaScript -->
-                    </tbody>
-                    <tfoot class="bg-slate-200 font-bold">
-                        <tr>
-                            <td colspan="5" class="p-3 text-right text-slate-800">Totals:</td>
-                            <td id="total-amount-payable" class="p-3 text-slate-800"></td>
-                            <td id="total-ins-reim" class="p-3 text-slate-800"></td>
-                            <td id="total-oil-saved" class="p-3 text-slate-800"></td>
-                            <td id="total-payable" class="p-3 text-indigo-700"></td>
-                            <td id="total-income-tax" class="p-3 text-slate-800"></td>
-                            <td id="total-penalty" class="p-3 text-slate-800"></td>
-                            <td id="total-less-others" class="p-3 text-slate-800"></td>
-                            <td id="total-deductions" class="p-3 text-red-700"></td>
-                            <td id="total-net-payable" class="p-3 text-green-700"></td>
-                            <td class="p-3"></td>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
-        </section>
-
-        <!-- Page: Bus-wise Audit -->
-        <section id="bus-wise-audit" class="page bg-slate-50 p-8 rounded-2xl shadow-lg">
-            <div class="flex items-center mb-6">
-                <button onclick="showPage('home')" class="flex items-center text-indigo-600 hover:text-indigo-800 font-medium transition-colors mr-6">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                      <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
-                    </svg>
-                    Back
-                </button>
-                <h2 class="text-3xl font-bold text-slate-900">Bus-wise Profit vs. Loss</h2>
-            </div>
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <div class="lg:col-span-2 bg-slate-100 p-6 rounded-lg border">
-                    <h3 class="text-xl font-semibold mb-4 text-center">Quarterly Performance Overview</h3>
-                    <canvas id="busProfitLossChart"></canvas>
-                </div>
-                <div class="lg:col-span-1 bg-slate-100 p-6 rounded-lg border">
-                     <h3 class="text-xl font-semibold mb-4 text-center">Other Representations</h3>
-                     <p class="text-center text-slate-600 mb-4">Revenue by Bus</p>
-                     <canvas id="revenuePieChart"></canvas>
-                </div>
-            </div>
-        </section>
-
-    </div>
-
-    <!-- Link to your JavaScript file -->
-    <script src="script.js"></script>
+    <script src="js/script.js"></script>
 </body>
 </html>
-
