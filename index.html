@@ -146,13 +146,13 @@
                 <table class="min-w-full">
                     <thead class="bg-slate-100">
                         <tr>
+                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">SNO</th>
                             <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Date</th>
                             <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">PARTICULARS</th>
                             <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Vch Type</th>
                             <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Vch No.</th>
                             <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Debit</th>
                             <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Credit</th>
-                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Balance</th>
                         </tr>
                     </thead>
                     <tbody class="bg-slate-50 divide-y divide-slate-200" id="audit-table-body">
@@ -200,99 +200,92 @@
             if (activePage) {
                 activePage.style.display = 'block';
             }
-            // Close mobile menu on navigation
             document.getElementById('mobile-menu').classList.add('hidden');
 
-
-            // If we are showing the bus audit page, create the charts
             if (pageId === 'bus-wise-audit') {
                 createBusProfitLossChart();
                 createRevenuePieChart();
             }
         }
 
-        // Function to show a specific audit file
+        // ⭐ MODIFIED: Now passes the selected month to the data generation function
         function showAuditFile(month) {
             document.getElementById('audit-file-month').textContent = month;
-            generateSampleAuditData();
+            generateSampleAuditData(month); // Pass the month
             showPage('audit-file');
         }
 
-        // ⭐ MODIFIED: Generate sample data for the audit table
-        function generateSampleAuditData() {
+        // ⭐ MODIFIED: Generates specific data for Jan 2024 and random data for others
+        function generateSampleAuditData(month) {
             const tableBody = document.getElementById('audit-table-body');
             tableBody.innerHTML = ''; // Clear previous data
-            let runningBalance = 0;
-            const rowCount = Math.floor(Math.random() * 10) + 8; // Random number of rows
-            const vchTypes = ['Payment', 'Receipt', 'Journal'];
 
-            for (let i = 1; i <= rowCount; i++) {
-                const isDebit = Math.random() > 0.5;
-                const debit = isDebit ? Math.floor(Math.random() * 5000) + 100 : 0;
-                const credit = !isDebit ? Math.floor(Math.random() * 4000) + 50 : 0;
-                
-                runningBalance += (debit - credit);
+            // Specific data for January 2024 as per the image
+            const jan2024Data = [
+                { sno: 1, date: '01.01.2024', particulars: 'Diesel', vchType: 'Payment', vchNo: 1, debit: 120000, credit: 0 },
+                { sno: 2, date: '01.01.2024', particulars: 'St Ann\'s salary', vchType: 'Payment', vchNo: 2, debit: 15000, credit: 0 },
+                { sno: 3, date: '01.01.2024', particulars: 'Bus EMI', vchType: 'Payment', vchNo: 3, debit: 123000, credit: 0 },
+                { sno: 4, date: '02.01.2024', particulars: 'Bharath salary', vchType: 'Payment', vchNo: 4, debit: 15000, credit: 0 },
+                { sno: 5, date: '03.01.2024', particulars: 'Sri chaitanya salary', vchType: 'Payment', vchNo: 5, debit: 15000, credit: 0 },
+                { sno: 6, date: '03.01.2024', particulars: 'HDFC cash deposited', vchType: 'Receipt', vchNo: 6, debit: 0, credit: 300000 },
+                { sno: 7, date: '04.01.2024', particulars: 'Fastag', vchType: 'Payment', vchNo: 7, debit: 5000, credit: 0 },
+                { sno: 8, date: '04.01.2024', particulars: 'Google pay', vchType: 'Receipt', vchNo: 8, debit: 0, credit: 5000 },
+                { sno: 9, date: '05.01.2024', particulars: 'Challan', vchType: 'Payment', vchNo: 9, debit: 2000, credit: 0 },
+                { sno: 10, date: '06.01.2024', particulars: 'RTA', vchType: 'Payment', vchNo: 10, debit: 25000, credit: 0 },
+                { sno: 11, date: '08.01.2024', particulars: 'Spares', vchType: 'Payment', vchNo: 11, debit: 25000, credit: 0 },
+                { sno: 12, date: '10.01.2024', particulars: 'HDFC cash deposited', vchType: 'Receipt', vchNo: 12, debit: 0, credit: 500000 },
+                { sno: 13, date: '11.01.2024', particulars: 'Tirupati', vchType: 'Payment', vchNo: 13, debit: 50000, credit: 0 }
+            ];
 
-                const balanceClass = runningBalance >= 0 ? 'text-green-600' : 'text-red-600';
-                const rowClass = i % 2 === 0 ? 'bg-slate-100' : 'bg-slate-50';
+            let dataToDisplay = [];
+
+            if (month === 'Jan 2024') {
+                dataToDisplay = jan2024Data;
+            } else {
+                // Generate random data for any other month
+                const rowCount = Math.floor(Math.random() * 10) + 8;
+                const vchTypes = ['Payment', 'Receipt', 'Journal'];
+                for (let i = 1; i <= rowCount; i++) {
+                    const isDebit = Math.random() > 0.6;
+                    const debit = isDebit ? Math.floor(Math.random() * 5000) + 100 : 0;
+                    const credit = !isDebit ? Math.floor(Math.random() * 4000) + 50 : 0;
+                    dataToDisplay.push({
+                        sno: i,
+                        date: `2025-XX-${String(i).padStart(2, '0')}`,
+                        particulars: `Random Transaction ${i}`,
+                        vchType: vchTypes[i % vchTypes.length],
+                        vchNo: 1000 + i,
+                        debit: debit,
+                        credit: credit
+                    });
+                }
+            }
+
+            dataToDisplay.forEach((entry, index) => {
+                const debitAmount = entry.debit > 0 ? `₹${entry.debit.toLocaleString('en-IN')}` : '';
+                const creditAmount = entry.credit > 0 ? `₹${entry.credit.toLocaleString('en-IN')}` : '';
+                const rowClass = (index + 1) % 2 === 0 ? 'bg-slate-100' : 'bg-slate-50';
 
                 const row = `
-                    <tr class="${rowClass}" id="row-${i}">
-                        <td class="px-4 py-4 whitespace-nowrap text-sm text-slate-500">2025-01-${String(i).padStart(2, '0')}</td>
-                        <td class="px-4 py-4 whitespace-nowrap text-sm text-slate-900" contenteditable="true">Transaction Detail ${i}</td>
-                        <td class="px-4 py-4 whitespace-nowrap text-sm text-slate-700" contenteditable="true">${vchTypes[i % vchTypes.length]}</td>
-                        <td class="px-4 py-4 whitespace-nowrap text-sm text-slate-700" contenteditable="true">${1000 + i}</td>
-                        <td class="px-4 py-4 whitespace-nowrap text-sm text-slate-800 debit-cell" contenteditable="true" onblur="recalculateBalances()">₹${debit.toLocaleString()}</td>
-                        <td class="px-4 py-4 whitespace-nowrap text-sm text-slate-800 credit-cell" contenteditable="true" onblur="recalculateBalances()">₹${credit.toLocaleString()}</td>
-                        <td class="px-4 py-4 whitespace-nowrap text-sm font-medium ${balanceClass} balance-cell">₹${runningBalance.toLocaleString()}</td>
+                    <tr class="${rowClass}" id="row-${entry.sno}">
+                        <td class="px-4 py-4 whitespace-nowrap text-sm text-slate-600 font-medium">${entry.sno}</td>
+                        <td class="px-4 py-4 whitespace-nowrap text-sm text-slate-500">${entry.date}</td>
+                        <td class="px-4 py-4 whitespace-nowrap text-sm text-slate-900" contenteditable="true">${entry.particulars}</td>
+                        <td class="px-4 py-4 whitespace-nowrap text-sm text-slate-700" contenteditable="true">${entry.vchType}</td>
+                        <td class="px-4 py-4 whitespace-nowrap text-sm text-slate-700" contenteditable="true">${entry.vchNo}</td>
+                        <td class="px-4 py-4 whitespace-nowrap text-sm text-green-600" contenteditable="true">${debitAmount}</td>
+                        <td class="px-4 py-4 whitespace-nowrap text-sm text-red-600" contenteditable="true">${creditAmount}</td>
                     </tr>
                 `;
                 tableBody.innerHTML += row;
-            }
-        }
-
-        // ⭐ NEW: Recalculates all balances in the table from top to bottom
-        function recalculateBalances() {
-            let runningBalance = 0;
-            const tableBody = document.getElementById('audit-table-body');
-            const rows = tableBody.querySelectorAll('tr');
-
-            // Helper to parse currency string to a number
-            const parseCurrency = (text) => {
-                return parseFloat(text.replace(/[^0-9.-]+/g, "")) || 0;
-            };
-
-            rows.forEach(row => {
-                const debitCell = row.querySelector('.debit-cell');
-                const creditCell = row.querySelector('.credit-cell');
-                const balanceCell = row.querySelector('.balance-cell');
-
-                const debit = parseCurrency(debitCell.innerText);
-                const credit = parseCurrency(creditCell.innerText);
-
-                runningBalance += (debit - credit);
-
-                // Update the balance cell's text and color
-                balanceCell.innerText = '₹' + runningBalance.toLocaleString();
-                balanceCell.classList.remove('text-green-600', 'text-red-600');
-                balanceCell.classList.add(runningBalance >= 0 ? 'text-green-600' : 'text-red-600');
-                
-                // Re-format the edited cells to ensure currency symbol and formatting are consistent
-                if (!debitCell.innerText.startsWith('₹')) {
-                    debitCell.innerText = '₹' + debit.toLocaleString();
-                }
-                if (!creditCell.innerText.startsWith('₹')) {
-                    creditCell.innerText = '₹' + credit.toLocaleString();
-                }
             });
         }
-
 
         // Function to create the Profit vs Loss bar chart
         function createBusProfitLossChart() {
             const ctx = document.getElementById('busProfitLossChart').getContext('2d');
             if (profitLossChartInstance) {
-                profitLossChartInstance.destroy(); // Destroy old chart instance to prevent conflicts
+                profitLossChartInstance.destroy();
             }
             profitLossChartInstance = new Chart(ctx, {
                 type: 'bar',
@@ -334,7 +327,7 @@
         function createRevenuePieChart() {
             const ctx = document.getElementById('revenuePieChart').getContext('2d');
              if (revenuePieChartInstance) {
-                revenuePieChartInstance.destroy(); // Destroy old chart instance
+                revenuePieChartInstance.destroy();
             }
             revenuePieChartInstance = new Chart(ctx, {
                 type: 'doughnut',
@@ -343,15 +336,9 @@
                     datasets: [{
                         label: 'Revenue',
                         data: [35000, 48000, 15000, 22000, 51000],
-                        backgroundColor: [
-                            '#4f46e5', // Indigo
-                            '#10b981', // Emerald
-                            '#f59e0b', // Amber
-                            '#3b82f6', // Blue
-                            '#6366f1'  // Indigo Light
-                        ],
+                        backgroundColor: ['#4f46e5', '#10b981', '#f59e0b', '#3b82f6', '#6366f1'],
                         hoverOffset: 8,
-                        borderColor: '#f1f5f9', // slate-100 for border
+                        borderColor: '#f1f5f9',
                     }]
                 },
                 options: {
@@ -364,7 +351,6 @@
         document.getElementById('mobile-menu-button').addEventListener('click', function() {
             document.getElementById('mobile-menu').classList.toggle('hidden');
         });
-
 
         // Show the home page by default on load
         window.onload = () => showPage('home');
