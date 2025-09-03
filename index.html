@@ -141,16 +141,18 @@
                 </button>
                 <h2 class="text-3xl font-bold text-slate-900">Audit File: <span id="audit-file-month"></span></h2>
             </div>
-            <p class="text-sm text-slate-500 mb-6 ml-16">Click on Description, Revenue, or Expense cells to edit values.</p>
+            <p class="text-sm text-slate-500 mb-6 ml-16">Click on PARTICULARS, Vch Type, Vch No., Debit, or Credit cells to edit.</p>
             <div class="overflow-x-auto rounded-lg border">
                 <table class="min-w-full">
                     <thead class="bg-slate-100">
                         <tr>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Date</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Description</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Revenue</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Expense</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Profit/Loss</th>
+                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Date</th>
+                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">PARTICULARS</th>
+                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Vch Type</th>
+                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Vch No.</th>
+                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Debit</th>
+                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Credit</th>
+                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Balance</th>
                         </tr>
                     </thead>
                     <tbody class="bg-slate-50 divide-y divide-slate-200" id="audit-table-body">
@@ -220,54 +222,69 @@
         function generateSampleAuditData() {
             const tableBody = document.getElementById('audit-table-body');
             tableBody.innerHTML = ''; // Clear previous data
-            const rowCount = Math.floor(Math.random() * 8) + 5; // Random number of rows
+            let runningBalance = 0;
+            const rowCount = Math.floor(Math.random() * 10) + 8; // Random number of rows
+            const vchTypes = ['Payment', 'Receipt', 'Journal'];
+
             for (let i = 1; i <= rowCount; i++) {
-                const revenue = Math.floor(Math.random() * 5000) + 1000;
-                const expense = Math.floor(Math.random() * 4000) + 500;
-                const profit = revenue - expense;
-                const profitClass = profit >= 0 ? 'text-green-600' : 'text-red-600';
+                const isDebit = Math.random() > 0.5;
+                const debit = isDebit ? Math.floor(Math.random() * 5000) + 100 : 0;
+                const credit = !isDebit ? Math.floor(Math.random() * 4000) + 50 : 0;
+                
+                runningBalance += (debit - credit);
+
+                const balanceClass = runningBalance >= 0 ? 'text-green-600' : 'text-red-600';
                 const rowClass = i % 2 === 0 ? 'bg-slate-100' : 'bg-slate-50';
 
                 const row = `
                     <tr class="${rowClass}" id="row-${i}">
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">2025-01-${String(i).padStart(2, '0')}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-900" contenteditable="true">Route Ticket Sales</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-green-600 revenue-cell" contenteditable="true" onblur="updateProfitLoss(${i})">₹${revenue.toLocaleString()}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-red-600 expense-cell" contenteditable="true" onblur="updateProfitLoss(${i})">₹${expense.toLocaleString()}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium ${profitClass} profit-cell">₹${profit.toLocaleString()}</td>
+                        <td class="px-4 py-4 whitespace-nowrap text-sm text-slate-500">2025-01-${String(i).padStart(2, '0')}</td>
+                        <td class="px-4 py-4 whitespace-nowrap text-sm text-slate-900" contenteditable="true">Transaction Detail ${i}</td>
+                        <td class="px-4 py-4 whitespace-nowrap text-sm text-slate-700" contenteditable="true">${vchTypes[i % vchTypes.length]}</td>
+                        <td class="px-4 py-4 whitespace-nowrap text-sm text-slate-700" contenteditable="true">${1000 + i}</td>
+                        <td class="px-4 py-4 whitespace-nowrap text-sm text-slate-800 debit-cell" contenteditable="true" onblur="recalculateBalances()">₹${debit.toLocaleString()}</td>
+                        <td class="px-4 py-4 whitespace-nowrap text-sm text-slate-800 credit-cell" contenteditable="true" onblur="recalculateBalances()">₹${credit.toLocaleString()}</td>
+                        <td class="px-4 py-4 whitespace-nowrap text-sm font-medium ${balanceClass} balance-cell">₹${runningBalance.toLocaleString()}</td>
                     </tr>
                 `;
                 tableBody.innerHTML += row;
             }
         }
 
-        // ⭐ NEW: Function to update profit/loss when a cell is edited
-        function updateProfitLoss(rowIndex) {
-            const row = document.getElementById(`row-${rowIndex}`);
-            if (!row) return;
-
-            const revenueCell = row.querySelector('.revenue-cell');
-            const expenseCell = row.querySelector('.expense-cell');
-            const profitCell = row.querySelector('.profit-cell');
+        // ⭐ NEW: Recalculates all balances in the table from top to bottom
+        function recalculateBalances() {
+            let runningBalance = 0;
+            const tableBody = document.getElementById('audit-table-body');
+            const rows = tableBody.querySelectorAll('tr');
 
             // Helper to parse currency string to a number
             const parseCurrency = (text) => {
-                // Remove currency symbols, commas, and whitespace
                 return parseFloat(text.replace(/[^0-9.-]+/g, "")) || 0;
             };
 
-            const revenue = parseCurrency(revenueCell.innerText);
-            const expense = parseCurrency(expenseCell.innerText);
-            const profit = revenue - expense;
+            rows.forEach(row => {
+                const debitCell = row.querySelector('.debit-cell');
+                const creditCell = row.querySelector('.credit-cell');
+                const balanceCell = row.querySelector('.balance-cell');
 
-            // Update the profit cell's text and color
-            profitCell.innerText = '₹' + profit.toLocaleString();
-            profitCell.classList.remove('text-green-600', 'text-red-600');
-            profitCell.classList.add(profit >= 0 ? 'text-green-600' : 'text-red-600');
+                const debit = parseCurrency(debitCell.innerText);
+                const credit = parseCurrency(creditCell.innerText);
 
-            // Re-format the edited cells to ensure currency symbol and formatting are consistent
-            revenueCell.innerText = '₹' + revenue.toLocaleString();
-            expenseCell.innerText = '₹' + expense.toLocaleString();
+                runningBalance += (debit - credit);
+
+                // Update the balance cell's text and color
+                balanceCell.innerText = '₹' + runningBalance.toLocaleString();
+                balanceCell.classList.remove('text-green-600', 'text-red-600');
+                balanceCell.classList.add(runningBalance >= 0 ? 'text-green-600' : 'text-red-600');
+                
+                // Re-format the edited cells to ensure currency symbol and formatting are consistent
+                if (!debitCell.innerText.startsWith('₹')) {
+                    debitCell.innerText = '₹' + debit.toLocaleString();
+                }
+                if (!creditCell.innerText.startsWith('₹')) {
+                    creditCell.innerText = '₹' + credit.toLocaleString();
+                }
+            });
         }
 
 
