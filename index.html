@@ -109,25 +109,19 @@
                 </button>
                 <h2 class="text-3xl font-bold text-slate-900">Select Audit Period</h2>
             </div>
-            <div class="space-y-8">
-                <div>
-                    <h3 class="text-xl font-semibold text-slate-700 mb-4 border-b pb-3">2025</h3>
-                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                        <a href="#" onclick="showAuditFile('Jan 2025')" class="text-center font-medium p-4 bg-white shadow-sm border rounded-lg hover:bg-indigo-500 hover:text-white hover:shadow-lg transition-all duration-200 transform hover:scale-105">January</a>
-                        <a href="#" onclick="showAuditFile('Feb 2025')" class="text-center font-medium p-4 bg-white shadow-sm border rounded-lg hover:bg-indigo-500 hover:text-white hover:shadow-lg transition-all duration-200 transform hover:scale-105">February</a>
-                        <a href="#" onclick="showAuditFile('Mar 2025')" class="text-center font-medium p-4 bg-white shadow-sm border rounded-lg hover:bg-indigo-500 hover:text-white hover:shadow-lg transition-all duration-200 transform hover:scale-105">March</a>
-                        <a href="#" class="text-center font-medium p-4 bg-slate-100 text-slate-400 border rounded-lg cursor-not-allowed">April</a>
-                    </div>
-                </div>
-                <div>
-                    <h3 class="text-xl font-semibold text-slate-700 mb-4 border-b pb-3">2024</h3>
-                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                        <a href="#" onclick="showAuditFile('Jan 2024')" class="text-center font-medium p-4 bg-white shadow-sm border rounded-lg hover:bg-indigo-500 hover:text-white hover:shadow-lg transition-all duration-200 transform hover:scale-105">January</a>
-                        <a href="#" onclick="showAuditFile('Feb 2024')" class="text-center font-medium p-4 bg-white shadow-sm border rounded-lg hover:bg-indigo-500 hover:text-white hover:shadow-lg transition-all duration-200 transform hover:scale-105">February</a>
-                        <a href="#" onclick="showAuditFile('Mar 2024')" class="text-center font-medium p-4 bg-white shadow-sm border rounded-lg hover:bg-indigo-500 hover:text-white hover:shadow-lg transition-all duration-200 transform hover:scale-105">March</a>
-                        <a href="#" onclick="showAuditFile('Apr 2024')" class="text-center font-medium p-4 bg-white shadow-sm border rounded-lg hover:bg-indigo-500 hover:text-white hover:shadow-lg transition-all duration-200 transform hover:scale-105">April</a>
-                    </div>
-                </div>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                <a href="#" onclick="showAuditFile('January')" class="text-center font-medium p-4 bg-white shadow-sm border rounded-lg hover:bg-indigo-500 hover:text-white hover:shadow-lg transition-all duration-200 transform hover:scale-105">January</a>
+                <a href="#" onclick="showAuditFile('February')" class="text-center font-medium p-4 bg-white shadow-sm border rounded-lg hover:bg-indigo-500 hover:text-white hover:shadow-lg transition-all duration-200 transform hover:scale-105">February</a>
+                <a href="#" onclick="showAuditFile('March')" class="text-center font-medium p-4 bg-white shadow-sm border rounded-lg hover:bg-indigo-500 hover:text-white hover:shadow-lg transition-all duration-200 transform hover:scale-105">March</a>
+                <a href="#" onclick="showAuditFile('April')" class="text-center font-medium p-4 bg-white shadow-sm border rounded-lg hover:bg-indigo-500 hover:text-white hover:shadow-lg transition-all duration-200 transform hover:scale-105">April</a>
+                <a href="#" onclick="showAuditFile('May')" class="text-center font-medium p-4 bg-white shadow-sm border rounded-lg hover:bg-indigo-500 hover:text-white hover:shadow-lg transition-all duration-200 transform hover:scale-105">May</a>
+                <a href="#" onclick="showAuditFile('June')" class="text-center font-medium p-4 bg-white shadow-sm border rounded-lg hover:bg-indigo-500 hover:text-white hover:shadow-lg transition-all duration-200 transform hover:scale-105">June</a>
+                <a href="#" onclick="showAuditFile('July')" class="text-center font-medium p-4 bg-white shadow-sm border rounded-lg hover:bg-indigo-500 hover:text-white hover:shadow-lg transition-all duration-200 transform hover:scale-105">July</a>
+                <a href="#" onclick="showAuditFile('August')" class="text-center font-medium p-4 bg-white shadow-sm border rounded-lg hover:bg-indigo-500 hover:text-white hover:shadow-lg transition-all duration-200 transform hover:scale-105">August</a>
+                <a href="#" onclick="showAuditFile('September')" class="text-center font-medium p-4 bg-white shadow-sm border rounded-lg hover:bg-indigo-500 hover:text-white hover:shadow-lg transition-all duration-200 transform hover:scale-105">September</a>
+                <a href="#" onclick="showAuditFile('October')" class="text-center font-medium p-4 bg-white shadow-sm border rounded-lg hover:bg-indigo-500 hover:text-white hover:shadow-lg transition-all duration-200 transform hover:scale-105">October</a>
+                <a href="#" onclick="showAuditFile('November')" class="text-center font-medium p-4 bg-white shadow-sm border rounded-lg hover:bg-indigo-500 hover:text-white hover:shadow-lg transition-all duration-200 transform hover:scale-105">November</a>
+                <a href="#" onclick="showAuditFile('December')" class="text-center font-medium p-4 bg-white shadow-sm border rounded-lg hover:bg-indigo-500 hover:text-white hover:shadow-lg transition-all duration-200 transform hover:scale-105">December</a>
             </div>
         </section>
 
@@ -141,22 +135,22 @@
                 </button>
                 <h2 class="text-3xl font-bold text-slate-900">Audit File: <span id="audit-file-month"></span></h2>
             </div>
-            <p class="text-sm text-slate-500 mb-6 ml-16">Click on PARTICULARS, Vch Type, Vch No., Debit, or Credit cells to edit.</p>
+            <p class="text-sm text-slate-500 mb-6 ml-16">Click on Bus Number, Creditted Money, or Expensives cells to edit values.</p>
             <div class="overflow-x-auto rounded-lg border">
                 <table class="min-w-full">
                     <thead class="bg-slate-100">
                         <tr>
-                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">SNO</th>
-                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Date</th>
-                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">PARTICULARS</th>
-                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Vch Type</th>
-                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Vch No.</th>
-                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Debit</th>
-                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Credit</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">S.No</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Bus Number</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Creditted Money</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Expensives</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Mony Left</th>
                         </tr>
                     </thead>
                     <tbody class="bg-slate-50 divide-y divide-slate-200" id="audit-table-body">
-                        </tbody>
+                    </tbody>
+                    <tfoot class="bg-slate-200 font-bold" id="audit-table-foot">
+                    </tfoot>
                 </table>
             </div>
         </section>
@@ -200,92 +194,111 @@
             if (activePage) {
                 activePage.style.display = 'block';
             }
+            // Close mobile menu on navigation
             document.getElementById('mobile-menu').classList.add('hidden');
 
+
+            // If we are showing the bus audit page, create the charts
             if (pageId === 'bus-wise-audit') {
                 createBusProfitLossChart();
                 createRevenuePieChart();
             }
         }
 
-        // ⭐ MODIFIED: Now passes the selected month to the data generation function
+        // Function to show a specific audit file
         function showAuditFile(month) {
             document.getElementById('audit-file-month').textContent = month;
-            generateSampleAuditData(month); // Pass the month
+            generateSampleAuditData();
             showPage('audit-file');
         }
 
-        // ⭐ MODIFIED: Generates specific data for Jan 2024 and random data for others
-        function generateSampleAuditData(month) {
+        // ⭐ MODIFIED: Generate sample data for the audit table
+        function generateSampleAuditData() {
             const tableBody = document.getElementById('audit-table-body');
             tableBody.innerHTML = ''; // Clear previous data
-
-            // Specific data for January 2024 as per the image
-            const jan2024Data = [
-                { sno: 1, date: '01.01.2024', particulars: 'Diesel', vchType: 'Payment', vchNo: 1, debit: 120000, credit: 0 },
-                { sno: 2, date: '01.01.2024', particulars: 'St Ann\'s salary', vchType: 'Payment', vchNo: 2, debit: 15000, credit: 0 },
-                { sno: 3, date: '01.01.2024', particulars: 'Bus EMI', vchType: 'Payment', vchNo: 3, debit: 123000, credit: 0 },
-                { sno: 4, date: '02.01.2024', particulars: 'Bharath salary', vchType: 'Payment', vchNo: 4, debit: 15000, credit: 0 },
-                { sno: 5, date: '03.01.2024', particulars: 'Sri chaitanya salary', vchType: 'Payment', vchNo: 5, debit: 15000, credit: 0 },
-                { sno: 6, date: '03.01.2024', particulars: 'HDFC cash deposited', vchType: 'Receipt', vchNo: 6, debit: 0, credit: 300000 },
-                { sno: 7, date: '04.01.2024', particulars: 'Fastag', vchType: 'Payment', vchNo: 7, debit: 5000, credit: 0 },
-                { sno: 8, date: '04.01.2024', particulars: 'Google pay', vchType: 'Receipt', vchNo: 8, debit: 0, credit: 5000 },
-                { sno: 9, date: '05.01.2024', particulars: 'Challan', vchType: 'Payment', vchNo: 9, debit: 2000, credit: 0 },
-                { sno: 10, date: '06.01.2024', particulars: 'RTA', vchType: 'Payment', vchNo: 10, debit: 25000, credit: 0 },
-                { sno: 11, date: '08.01.2024', particulars: 'Spares', vchType: 'Payment', vchNo: 11, debit: 25000, credit: 0 },
-                { sno: 12, date: '10.01.2024', particulars: 'HDFC cash deposited', vchType: 'Receipt', vchNo: 12, debit: 0, credit: 500000 },
-                { sno: 13, date: '11.01.2024', particulars: 'Tirupati', vchType: 'Payment', vchNo: 13, debit: 50000, credit: 0 }
-            ];
-
-            let dataToDisplay = [];
-
-            if (month === 'Jan 2024') {
-                dataToDisplay = jan2024Data;
-            } else {
-                // Generate random data for any other month
-                const rowCount = Math.floor(Math.random() * 10) + 8;
-                const vchTypes = ['Payment', 'Receipt', 'Journal'];
-                for (let i = 1; i <= rowCount; i++) {
-                    const isDebit = Math.random() > 0.6;
-                    const debit = isDebit ? Math.floor(Math.random() * 5000) + 100 : 0;
-                    const credit = !isDebit ? Math.floor(Math.random() * 4000) + 50 : 0;
-                    dataToDisplay.push({
-                        sno: i,
-                        date: `2025-XX-${String(i).padStart(2, '0')}`,
-                        particulars: `Random Transaction ${i}`,
-                        vchType: vchTypes[i % vchTypes.length],
-                        vchNo: 1000 + i,
-                        debit: debit,
-                        credit: credit
-                    });
-                }
-            }
-
-            dataToDisplay.forEach((entry, index) => {
-                const debitAmount = entry.debit > 0 ? `₹${entry.debit.toLocaleString('en-IN')}` : '';
-                const creditAmount = entry.credit > 0 ? `₹${entry.credit.toLocaleString('en-IN')}` : '';
-                const rowClass = (index + 1) % 2 === 0 ? 'bg-slate-100' : 'bg-slate-50';
+            const rowCount = Math.floor(Math.random() * 8) + 5; // Random number of rows
+            for (let i = 1; i <= rowCount; i++) {
+                const revenue = Math.floor(Math.random() * 50000) + 10000;
+                const expense = Math.floor(Math.random() * 40000) + 5000;
+                const profit = revenue - expense;
+                const profitClass = profit >= 0 ? 'text-green-600' : 'text-red-600';
+                const rowClass = i % 2 === 0 ? 'bg-slate-100' : 'bg-slate-50';
 
                 const row = `
-                    <tr class="${rowClass}" id="row-${entry.sno}">
-                        <td class="px-4 py-4 whitespace-nowrap text-sm text-slate-600 font-medium">${entry.sno}</td>
-                        <td class="px-4 py-4 whitespace-nowrap text-sm text-slate-500">${entry.date}</td>
-                        <td class="px-4 py-4 whitespace-nowrap text-sm text-slate-900" contenteditable="true">${entry.particulars}</td>
-                        <td class="px-4 py-4 whitespace-nowrap text-sm text-slate-700" contenteditable="true">${entry.vchType}</td>
-                        <td class="px-4 py-4 whitespace-nowrap text-sm text-slate-700" contenteditable="true">${entry.vchNo}</td>
-                        <td class="px-4 py-4 whitespace-nowrap text-sm text-green-600" contenteditable="true">${debitAmount}</td>
-                        <td class="px-4 py-4 whitespace-nowrap text-sm text-red-600" contenteditable="true">${creditAmount}</td>
+                    <tr class="${rowClass}" id="row-${i}">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">${i}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-900" contenteditable="true">AP-XX-YY-${1000 + i}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-green-600 revenue-cell" contenteditable="true" onblur="updateRowAndTotals(${i})">₹${revenue.toLocaleString()}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-red-600 expense-cell" contenteditable="true" onblur="updateRowAndTotals(${i})">₹${expense.toLocaleString()}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium ${profitClass} profit-cell">₹${profit.toLocaleString()}</td>
                     </tr>
                 `;
                 tableBody.innerHTML += row;
-            });
+            }
+            updateTotals(); // Calculate totals after generating rows
         }
+
+        // ⭐ NEW: Function to update a single row's profit and then update the table footer totals
+        function updateRowAndTotals(rowIndex) {
+            const row = document.getElementById(`row-${rowIndex}`);
+            if (!row) return;
+
+            const revenueCell = row.querySelector('.revenue-cell');
+            const expenseCell = row.querySelector('.expense-cell');
+            const profitCell = row.querySelector('.profit-cell');
+
+            const parseCurrency = (text) => parseFloat(text.replace(/[^0-9.,]+/g, "")) || 0;
+
+            const revenue = parseCurrency(revenueCell.innerText);
+            const expense = parseCurrency(expenseCell.innerText);
+            const profit = revenue - expense;
+
+            // Update the profit cell's text and color for the specific row
+            profitCell.innerText = '₹' + profit.toLocaleString();
+            profitCell.classList.remove('text-green-600', 'text-red-600');
+            profitCell.classList.add(profit >= 0 ? 'text-green-600' : 'text-red-600');
+
+            // Re-format the edited cells
+            revenueCell.innerText = '₹' + revenue.toLocaleString();
+            expenseCell.innerText = '₹' + expense.toLocaleString();
+
+            // After updating the row, recalculate the totals in the footer
+            updateTotals();
+        }
+        
+        // ⭐ NEW: Function to calculate and display totals in the table footer
+        function updateTotals() {
+            const tableFoot = document.getElementById('audit-table-foot');
+            const revenueCells = document.querySelectorAll('#audit-table-body .revenue-cell');
+            const expenseCells = document.querySelectorAll('#audit-table-body .expense-cell');
+
+            const parseCurrency = (text) => parseFloat(text.replace(/[^0-9.,]+/g, "")) || 0;
+
+            let totalRevenue = 0;
+            revenueCells.forEach(cell => totalRevenue += parseCurrency(cell.innerText));
+
+            let totalExpense = 0;
+            expenseCells.forEach(cell => totalExpense += parseCurrency(cell.innerText));
+
+            const totalProfit = totalRevenue - totalExpense;
+            const totalProfitClass = totalProfit >= 0 ? 'text-green-600' : 'text-red-600';
+
+            tableFoot.innerHTML = `
+                <tr>
+                    <td class="px-6 py-4 text-sm uppercase tracking-wider" colspan="2">Total</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-green-600">₹${totalRevenue.toLocaleString()}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-red-600">₹${totalExpense.toLocaleString()}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium ${totalProfitClass}">₹${totalProfit.toLocaleString()}</td>
+                </tr>
+            `;
+        }
+
 
         // Function to create the Profit vs Loss bar chart
         function createBusProfitLossChart() {
             const ctx = document.getElementById('busProfitLossChart').getContext('2d');
             if (profitLossChartInstance) {
-                profitLossChartInstance.destroy();
+                profitLossChartInstance.destroy(); // Destroy old chart instance to prevent conflicts
             }
             profitLossChartInstance = new Chart(ctx, {
                 type: 'bar',
@@ -327,7 +340,7 @@
         function createRevenuePieChart() {
             const ctx = document.getElementById('revenuePieChart').getContext('2d');
              if (revenuePieChartInstance) {
-                revenuePieChartInstance.destroy();
+                revenuePieChartInstance.destroy(); // Destroy old chart instance
             }
             revenuePieChartInstance = new Chart(ctx, {
                 type: 'doughnut',
@@ -336,9 +349,15 @@
                     datasets: [{
                         label: 'Revenue',
                         data: [35000, 48000, 15000, 22000, 51000],
-                        backgroundColor: ['#4f46e5', '#10b981', '#f59e0b', '#3b82f6', '#6366f1'],
+                        backgroundColor: [
+                            '#4f46e5', // Indigo
+                            '#10b981', // Emerald
+                            '#f59e0b', // Amber
+                            '#3b82f6', // Blue
+                            '#6366f1'  // Indigo Light
+                        ],
                         hoverOffset: 8,
-                        borderColor: '#f1f5f9',
+                        borderColor: '#f1f5f9', // slate-100 for border
                     }]
                 },
                 options: {
@@ -351,6 +370,7 @@
         document.getElementById('mobile-menu-button').addEventListener('click', function() {
             document.getElementById('mobile-menu').classList.toggle('hidden');
         });
+
 
         // Show the home page by default on load
         window.onload = () => showPage('home');
