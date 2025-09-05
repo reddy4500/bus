@@ -10,11 +10,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Using Inter as the default font */
         body {
             font-family: 'Inter', sans-serif;
         }
-        /* Simple transition for smoother page changes */
         .page {
             display: none;
             animation: fadeIn 0.5s ease-in-out;
@@ -23,16 +21,21 @@
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        /* Style for editable cells */
         [contenteditable="true"] {
             cursor: pointer;
             outline: none;
-            background-color: rgba(239, 246, 255, 0.5); /* Light blue tint */
+            background-color: rgba(239, 246, 255, 0.5);
         }
         [contenteditable="true"]:focus {
-            background-color: rgba(224, 231, 255, 1); /* Darker blue on focus */
-            box-shadow: 0 0 0 2px #4f46e5; /* Indigo ring */
+            background-color: rgba(224, 231, 255, 1);
+            box-shadow: 0 0 0 2px #4f46e5;
             border-radius: 4px;
+        }
+        /* Placeholder for empty editable cells */
+        [contenteditable=true]:empty:before {
+            content: attr(data-placeholder);
+            color: #94a3b8; /* slate-400 */
+            font-style: italic;
         }
     </style>
 </head>
@@ -135,7 +138,7 @@
                 </button>
                 <h2 class="text-3xl font-bold text-slate-900">Audit File: <span id="audit-file-month"></span></h2>
             </div>
-            <p class="text-sm text-slate-500 mb-6 ml-16">Click on Bus Number, Creditted Money, or Expensives cells to edit values.</p>
+            <p class="text-sm text-slate-500 mb-6 ml-16">Enter your data in the cells below. Totals are calculated automatically.</p>
             <div class="overflow-x-auto rounded-lg border">
                 <table class="min-w-full">
                     <thead class="bg-slate-100">
@@ -185,7 +188,6 @@
         let profitLossChartInstance = null;
         let revenuePieChartInstance = null;
 
-        // Function to switch between pages
         function showPage(pageId) {
             pages.forEach(page => {
                 page.style.display = 'none';
@@ -194,51 +196,44 @@
             if (activePage) {
                 activePage.style.display = 'block';
             }
-            // Close mobile menu on navigation
             document.getElementById('mobile-menu').classList.add('hidden');
 
-
-            // If we are showing the bus audit page, create the charts
             if (pageId === 'bus-wise-audit') {
                 createBusProfitLossChart();
                 createRevenuePieChart();
             }
         }
 
-        // Function to show a specific audit file
         function showAuditFile(month) {
             document.getElementById('audit-file-month').textContent = month;
-            generateSampleAuditData();
+            buildEmptyTable();
             showPage('audit-file');
         }
 
-        // ⭐ MODIFIED: Generate sample data for the audit table
-        function generateSampleAuditData() {
+        // ⭐ MODIFIED: Build an empty table with 10 rows for data entry
+        function buildEmptyTable() {
             const tableBody = document.getElementById('audit-table-body');
             tableBody.innerHTML = ''; // Clear previous data
-            const rowCount = Math.floor(Math.random() * 8) + 5; // Random number of rows
+            const rowCount = 10; // Fixed number of rows
+
             for (let i = 1; i <= rowCount; i++) {
-                const revenue = Math.floor Math.random() ;
-                const expense = Math.floor Math.random() ;
-                const profit = revenue - expense;
-                const profitClass = profit >= 0 ? 'text-green-600' : 'text-red-600';
                 const rowClass = i % 2 === 0 ? 'bg-slate-100' : 'bg-slate-50';
 
                 const row = `
                     <tr class="${rowClass}" id="row-${i}">
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">${i}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-900" contenteditable="true">AP-XX-YY-${1000 + i}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-green-600 revenue-cell" contenteditable="true" onblur="updateRowAndTotals(${i})">₹${revenue.toLocaleString()}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-red-600 expense-cell" contenteditable="true" onblur="updateRowAndTotals(${i})">₹${expense.toLocaleString()}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium ${profitClass} profit-cell">₹${profit.toLocaleString()}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-900" contenteditable="true" data-placeholder="Enter bus no."></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-green-600 revenue-cell" contenteditable="true" data-placeholder="Enter amount" onblur="updateRowAndTotals(${i})"></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-red-600 expense-cell" contenteditable="true" data-placeholder="Enter amount" onblur="updateRowAndTotals(${i})"></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-500 profit-cell">₹0</td>
                     </tr>
                 `;
                 tableBody.innerHTML += row;
             }
-            updateTotals(); // Calculate totals after generating rows
+            updateTotals(); // Calculate initial totals, which will be all zeros
         }
 
-        // ⭐ NEW: Function to update a single row's profit and then update the table footer totals
+        // ⭐ MODIFIED: Update row totals and handle formatting
         function updateRowAndTotals(rowIndex) {
             const row = document.getElementById(`row-${rowIndex}`);
             if (!row) return;
@@ -247,32 +242,31 @@
             const expenseCell = row.querySelector('.expense-cell');
             const profitCell = row.querySelector('.profit-cell');
 
-            const parseCurrency = (text) => parseFloat(text.replace(/[^0-9.,]+/g, "")) || 0;
+            const parseCurrency = (text) => parseFloat(text.replace(/[^0-9.-]+/g, "")) || 0;
 
             const revenue = parseCurrency(revenueCell.innerText);
             const expense = parseCurrency(expenseCell.innerText);
             const profit = revenue - expense;
 
-            // Update the profit cell's text and color for the specific row
+            // Update the profit cell's text and color
             profitCell.innerText = '₹' + profit.toLocaleString();
-            profitCell.classList.remove('text-green-600', 'text-red-600');
+            profitCell.classList.remove('text-green-600', 'text-red-600', 'text-slate-500');
             profitCell.classList.add(profit >= 0 ? 'text-green-600' : 'text-red-600');
 
-            // Re-format the edited cells
+            // Re-format the edited cells to ensure currency symbol and formatting are consistent
             revenueCell.innerText = '₹' + revenue.toLocaleString();
             expenseCell.innerText = '₹' + expense.toLocaleString();
 
-            // After updating the row, recalculate the totals in the footer
             updateTotals();
         }
         
-        // ⭐ NEW: Function to calculate and display totals in the table footer
+        // Calculate and display totals in the table footer
         function updateTotals() {
             const tableFoot = document.getElementById('audit-table-foot');
             const revenueCells = document.querySelectorAll('#audit-table-body .revenue-cell');
             const expenseCells = document.querySelectorAll('#audit-table-body .expense-cell');
 
-            const parseCurrency = (text) => parseFloat(text.replace(/[^0-9.,]+/g, "")) || 0;
+            const parseCurrency = (text) => parseFloat(text.replace(/[^0-9.-]+/g, "")) || 0;
 
             let totalRevenue = 0;
             revenueCells.forEach(cell => totalRevenue += parseCurrency(cell.innerText));
@@ -293,12 +287,10 @@
             `;
         }
 
-
-        // Function to create the Profit vs Loss bar chart
         function createBusProfitLossChart() {
             const ctx = document.getElementById('busProfitLossChart').getContext('2d');
             if (profitLossChartInstance) {
-                profitLossChartInstance.destroy(); // Destroy old chart instance to prevent conflicts
+                profitLossChartInstance.destroy();
             }
             profitLossChartInstance = new Chart(ctx, {
                 type: 'bar',
@@ -336,11 +328,10 @@
             });
         }
         
-        // Function to create the Revenue pie chart
         function createRevenuePieChart() {
             const ctx = document.getElementById('revenuePieChart').getContext('2d');
              if (revenuePieChartInstance) {
-                revenuePieChartInstance.destroy(); // Destroy old chart instance
+                revenuePieChartInstance.destroy();
             }
             revenuePieChartInstance = new Chart(ctx, {
                 type: 'doughnut',
@@ -350,14 +341,14 @@
                         label: 'Revenue',
                         data: [35000, 48000, 15000, 22000, 51000],
                         backgroundColor: [
-                            '#4f46e5', // Indigo
-                            '#10b981', // Emerald
-                            '#f59e0b', // Amber
-                            '#3b82f6', // Blue
-                            '#6366f1'  // Indigo Light
+                            '#4f46e5',
+                            '#10b981',
+                            '#f59e0b',
+                            '#3b82f6',
+                            '#6366f1'
                         ],
                         hoverOffset: 8,
-                        borderColor: '#f1f5f9', // slate-100 for border
+                        borderColor: '#f1f5f9',
                     }]
                 },
                 options: {
@@ -366,13 +357,10 @@
             });
         }
 
-        // Mobile menu toggle
         document.getElementById('mobile-menu-button').addEventListener('click', function() {
             document.getElementById('mobile-menu').classList.toggle('hidden');
         });
 
-
-        // Show the home page by default on load
         window.onload = () => showPage('home');
     </script>
 
